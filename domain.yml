@@ -1,29 +1,55 @@
 intents:
 - greet
 - goodbye
-- affirm
-- deny
-- mood_great
-- mood_unhappy
-- bot_challenge
+- query_receipt_address
+- provide_name
+- provide_tel
+- provide_drug
+- query_drugstore
+- query_apply_city
+- provide_apply_city
+- consult_service_tel
+- consult_service_worktime
+- consult_platform
+- consult_application_materials
+- consult_fill_express
+- query_audit_progress
 templates:
   utter_greet:
-  - text: Hey! How are you?
-  utter_cheer_up:
-  - text: 'Here is something to cheer you up:'
-    image: https://i.imgur.com/nGF1K8f.jpg
-  utter_did_that_help:
-  - text: Did that help you?
-  utter_happy:
-  - text: Great, carry on!
+  - text: 您好，我是您的筹药顾问小智，很高兴为您服务。我可以为您快速查询地址、电话、进度、工作时间等信息。请问有什么可以帮助您？
   utter_goodbye:
-  - text: Bye
-  utter_iamabot:
-  - text: I am a bot, powered by Rasa.
+  - text: 再见！
+  utter_ask_name:
+  - text: 为了更好的为您提供服务，请提供您的姓名
+  utter_ask_tel:
+  - text: 请提供您的手机号码
+  utter_ask_drug:
+  - text: 请提供您申请的药品，有福可维、安罗替尼、信必可
+  utter_ask_apply_city:
+  - text: 请提供您要查询的城市或地区名称，如您所在的城市不在列表中，您也可以查询方便领药的邻近地市
+  utter_consult_service_tel:
+  - text: 医药筹平台热线：027-59425239 工作时间为周一至周五 9：00-17：30
+  utter_consult_service_worktime:
+  - text: 顾问在线时间工作日周一至周五 9：00-12：00,13:00-18:00，医药筹平台热线工作时间为工作日周一至周五 9：00-17：30
+  utter_consult_platform:
+  - text: 医药筹平台是专业致力于帮助患者提供大病筹药/个人救助的信息发布服务的互联网平台，仅为发起人提供技术服务的网络渠道。医药筹平台是由中慈网络科技有限公司发起，由北京康盟慈善基金会、生命绿洲公益服务中心、中华社会救助基金会医疗公益基金提供定向募捐支持。平台帮患者筹集药品是完全免费的，不收取任何费用。
+  utter_consult_application_materials:
+  - text: 您好，首次申请需要提供：1.患者身份证复印件 2.本人及直系亲属户口本复印件3. 用药前和用药后影像学报告单(CT/MR)或X光报告单4.患者用药说明5.购药发票6.医生处方。如果是低保患者，还需要低保证明。
+  utter_consult_fill_express:
+  - text: 您可以直接在医药筹公众号提示您筹药成功的地方填写快递单号。
 actions:
 - utter_greet
-- utter_cheer_up
-- utter_did_that_help
-- utter_happy
 - utter_goodbye
-- utter_iamabot
+- utter_ask_name
+- utter_ask_tel
+- utter_ask_drug
+- utter_ask_apply_city
+- utter_consult_service_tel
+- utter_consult_service_worktime
+- utter_consult_platform
+- utter_consult_application_materials
+- utter_consult_fill_express
+- action_query_receipt_address
+- action_query_drugstore
+- action_query_apply_city
+- action_query_audit_progress
