@@ -23,28 +23,34 @@
 - 你们邮寄地址是什么
 
 ## intent:provide_name
-- 江小白
-- 我叫江小白
-- 我的名字是江小白
+- [江小白](patient_name)
+- 我叫[江小白](patient_name)
+- 我的名字是[江小白](patient_name)
 
 ## intent:provide_tel
-- 18812345678
-- 我的手机号码是18812345678
-- 我的号码是18812345678
+- [18812345678](phone-number)
+- 我的手机号码是[18812345678](phone-number)
+- 我的号码是[18812345678](phone-number)
+- 手机号码是[18812345678](phone-number)
+- 电话号码是[18812345678](phone-number)
+- 号码是[18812345678](phone-number)
+- 号码[18812345678](phone-number)
+- 电话是[18812345678](phone-number)
+- 电话[18812345678](phone-number)
 
 ## intent:provide_drug
-- 福可维
-- 我要申请福可维
-- 我想要申请福可维
-- 申请福可维
-- 安罗替尼
-- 我要申请安罗替尼
-- 我想要申请安罗替尼
-- 申请安罗替尼
-- 信必可
-- 我要申请信必可
-- 我想要申请信必可
-- 申请信必可
+- [福可维](apply_drug)
+- 我要申请[福可维](apply_drug)
+- 我想要申请[福可维](apply_drug)
+- 申请[福可维](apply_drug)
+- [安罗替尼](apply_drug)
+- 我要申请[安罗替尼](apply_drug)
+- 我想要申请[安罗替尼](apply_drug)
+- 申请[安罗替尼](apply_drug)
+- [信必可](apply_drug)
+- 我要申请[信必可](apply_drug)
+- 我想要申请[信必可](apply_drug)
+- 申请[信必可](apply_drug)
 
 ## intent:query_drugstore
 - 我想查询一下药房地址
@@ -60,9 +66,9 @@
 - 申请时选哪个城市
 
 ## intent:provide_apply_city
-- 湖北省咸宁市
-- 湖北咸宁市
-- 咸宁市
+- 湖北省[咸宁市](apply_city)
+- 湖北[咸宁市](apply_city)
+- [咸宁市](apply_city)
 
 ## intent:consult_service_tel
 - 我想查询你们电话是多少

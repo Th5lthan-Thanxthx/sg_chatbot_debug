@@ -14,6 +14,20 @@ intents:
 - consult_application_materials
 - consult_fill_express
 - query_audit_progress
+entities:
+- patient_name
+- phone-number
+- apply_drug
+- apply_city
+slots:
+  patient_name:
+    type: unfeaturized
+  phone-number:
+    type: unfeaturized
+  apply_drug:
+    type: unfeaturized
+  apply_city:
+    type: unfeaturized
 templates:
   utter_greet:
   - text: 您好，我是您的筹药顾问小智，很高兴为您服务。我可以为您快速查询地址、电话、进度、工作时间等信息。请问有什么可以帮助您？
@@ -22,7 +36,7 @@ templates:
   utter_ask_name:
   - text: 为了更好的为您提供服务，请提供您的姓名
   utter_ask_tel:
-  - text: 请提供您的手机号码
+  - text: 您好{patient_name}，请提供您的手机号码
   utter_ask_drug:
   - text: 请提供您申请的药品，有福可维、安罗替尼、信必可
   utter_ask_apply_city:

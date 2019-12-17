@@ -1,11 +1,27 @@
 language: zh
-pipeline: supervised_embeddings
+
+pipeline:
+- name: JiebaTokenizer
+- name: CRFEntityExtractor
+- name: DucklingHTTPExtractor
+  language: zh$core
+  url: http://localhost:38000
+  dimensions:
+  - time
+  - duration
+  - phone-number
+- name: EntitySynonymMapper
+- name: CountVectorsFeaturizer
+  OOV_token: oov
+  token_pattern: (?u)\b\w+\b
+- name: EmbeddingIntentClassifier
+
 policies:
+- name: FormPolicy
 - name: MemoizationPolicy
   max_history: 6
 - name: KerasPolicy
 - name: MappingPolicy
-- name: FormPolicy
 - name: EmbeddingPolicy
   max_history: 6
   epochs: 20
