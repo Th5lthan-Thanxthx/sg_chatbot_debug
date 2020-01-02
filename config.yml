@@ -18,11 +18,13 @@ pipeline:
 
 policies:
 - name: FormPolicy
-- name: MemoizationPolicy
-  max_history: 6
-- name: KerasPolicy
+- max_history: 6
+  name: AugmentedMemoizationPolicy
 - name: MappingPolicy
 - name: EmbeddingPolicy
   max_history: 6
   epochs: 20
   batch_size: [32,64]
+- core_threshold: 0.3
+  name: TwoStageFallbackPolicy
+  nlu_threshold: 0.8

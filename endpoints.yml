@@ -25,10 +25,10 @@ action_endpoint:
 #    password: <password used for authentication>
 #    use_ssl: <whether or not the communication is encrypted, default false>
 
-tracker_store:
-    type: mongod
-    url: mongodb://127.0.0.1:27017
-    db: sg_yycbot
+# tracker_store:
+#     type: mongod
+#     url: mongodb://127.0.0.1:27017
+#     db: sg_yycbot
 #    username: <username used for authentication>
 #    password: <password used for authentication>
 

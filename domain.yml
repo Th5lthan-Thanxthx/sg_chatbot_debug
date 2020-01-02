@@ -1,6 +1,8 @@
 intents:
 - greet
 - goodbye
+- enter_data:
+    use_entities: false
 - query_receipt_address
 - provide_name
 - provide_tel
@@ -14,6 +16,12 @@ intents:
 - consult_application_materials
 - consult_fill_express
 - query_audit_progress
+- invoice_loss
+- ask_invoice_reimbursement
+- ask_invoice_loss
+- out_of_scope
+- affirm
+- deny
 entities:
 - patient_name
 - phone-number
@@ -25,20 +33,27 @@ slots:
   phone-number:
     type: unfeaturized
   apply_drug:
-    type: unfeaturized
+    type: categorical
+    values:
+    - 福可维
+    - 瑞复美
+    - 脑脉利
+    - 益久
   apply_city:
+    type: unfeaturized
+  is_imburse:
     type: unfeaturized
 templates:
   utter_greet:
   - text: 您好，我是您的筹药顾问小智，很高兴为您服务。我可以为您快速查询地址、电话、进度、工作时间等信息。请问有什么可以帮助您？
   utter_goodbye:
-  - text: 再见！
-  utter_ask_name:
+  - text: 非常感谢您的咨询，祝您生活愉快！再见！
+  utter_ask_patient_name:
   - text: 为了更好的为您提供服务，请提供您的姓名
-  utter_ask_tel:
+  utter_ask_phone-number:
   - text: 您好{patient_name}，请提供您的手机号码
-  utter_ask_drug:
-  - text: 请提供您申请的药品，有福可维、安罗替尼、信必可
+  utter_ask_apply_drug:
+  - text: 请输入您申请的药品，有福可维（安罗替尼）、瑞复美（来那度胺）、脑脉利、益久
   utter_ask_apply_city:
   - text: 请提供您要查询的城市或地区名称，如您所在的城市不在列表中，您也可以查询方便领药的邻近地市
   utter_consult_service_tel:
@@ -51,13 +66,61 @@ templates:
   - text: 您好，首次申请需要提供：1.患者身份证复印件 2.本人及直系亲属户口本复印件3. 用药前和用药后影像学报告单(CT/MR)或X光报告单4.患者用药说明5.购药发票6.医生处方。如果是低保患者，还需要低保证明。
   utter_consult_fill_express:
   - text: 您可以直接在医药筹公众号提示您筹药成功的地方填写快递单号。
+  utter_no_patient_name:
+  - text: 抱歉，没有获取到您的姓名
+  utter_no_phone-number:
+  - text: 抱歉，没有获取到您的手机号
+  utter_no_apply_drug:
+  - text: 抱歉，没有获取到您的申请药品
+  utter_restart_with_button:
+  - buttons:
+    - payload: /restart
+      title: 重新对话
+    text: 点击按钮重新开始对话.
+  utter_default:
+  - text: "抱歉，没明白 🤷. 您能重新组织下语言吗?"
+  utter_out_of_scope:
+  - text: "抱歉帮不了您！"
+  utter_ask_continue_query_receipt:
+  - text: 您想继续查询快递地址吗?
+  utter_ask_continue_query_drugstore:
+  - text: 您想继续查询药房吗?
+  utter_ask_continue_query_apply_city:
+  - text: 您想继续查询申请城市吗?
+  utter_ask_continue_query_audit_progress:
+  - text: 您想继续查询申请进度吗？
+  utter_invoice_loss_fkw:
+  - text: 非常抱歉，申请安罗替尼（福可维）的筹药需要提供全价未报销的购药发票原件的，如果发票丢失，是无法提供清单、底联等材料代替发票申请筹药的。
+  utter_invoice_loss_rfm:
+  - text: 您申请瑞复美的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
+  utter_invoice_loss_nml:
+  - text: 您申请脑脉利的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
+  utter_invoice_loss_yj:
+  - text: 您申请益久的筹药，若是购药发票原件丢失，您可以提供发票复印件或者底联复印件（需包含收费章）。
+  utter_aks_is_reimburse:
+  - text: 请问发票中{apply_drug}药品是否报销？
+  utter_drug_reimbursement_no_fkw:
+  - text: 1.安罗替尼（福可维）没有报销，那么您需要上传以下材料：1）购药发票的复印件加盖报销单位红章（医院发票还需提供对应的购药清单）；2）报销单位开具的安罗替尼未报销证明盖报销单位红章。
+  utter_drug_reimbursement_yes_fkw:
+  - text: 非常抱歉，安罗替尼（福可维）报销之后是无法申请筹药的。
+  utter_invoice_no_reimbursement_certificate:
+  - text: 没有固定格式，您可以去报销单位开具安罗替尼（福可维）未报销的证明，注明清楚患者姓名，发票号，安罗替尼没有报销，并盖报销单位红章即可。
+  utter_question_not_fit:
+  - text: 你申请的{apply_drug}药品援助不存在此问题，正常申请即可。
+  utter_good:
+  - text: "👍"
+
+
 actions:
 - utter_greet
 - utter_goodbye
-- utter_ask_name
-- utter_ask_tel
-- utter_ask_drug
+- utter_ask_patient_name
+- utter_ask_phone-number
+- utter_ask_apply_drug
 - utter_ask_apply_city
+- utter_no_patient_name
+- utter_no_phone-number
+- utter_no_apply_drug
 - utter_consult_service_tel
 - utter_consult_service_worktime
 - utter_consult_platform
@@ -67,3 +130,32 @@ actions:
 - action_query_drugstore
 - action_query_apply_city
 - action_query_audit_progress
+- action_default_fallback
+- action_default_ask_affirmation
+- utter_restart_with_button
+- utter_default
+- utter_out_of_scope
+- utter_ask_continue_query_receipt
+- utter_ask_continue_query_drugstore
+- utter_ask_continue_query_apply_city
+- utter_ask_continue_query_audit_progress
+- utter_invoice_loss_fkw
+- utter_invoice_loss_rfm
+- utter_invoice_loss_nml
+- utter_invoice_loss_yj
+- utter_aks_drug_reimbursement
+- utter_drug_reimbursement_no_fkw
+- utter_drug_reimbursement_yes_fkw
+- utter_invoice_no_reimbursement_certificate
+- utter_question_not_fit
+- utter_good
+# - action_invoice_reimbursement
+
+
+forms:
+- query_receipt_form
+- query_drugstore_form
+- query_apply_city_form
+- query_audit_progress_form
+- ask_invoice_form
+- ask_invoice_reimbursement_form
