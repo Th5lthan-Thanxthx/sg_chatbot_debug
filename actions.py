@@ -5,47 +5,19 @@
 # https://rasa.com/docs/rasa/core/actions/#custom-actions/
 
 
-# This is a simple example for a custom action which utters "Hello World!"
-
-# from typing import Any, Text, Dict, List
-#
 import logging
 import json
 from typing import Text, Dict, Any, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.forms import FormAction
 from rasa_sdk.events import UserUtteranceReverted
-
 from rasa_sdk.executor import CollectingDispatcher
-#
-#
-# class ActionHelloWorld(Action):
-#
-#     def name(self) -> Text:
-#         return "action_hello_world"
-#
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#
-#         dispatcher.utter_message(text="Hello World!")
-#
-#         return []
 
 logging.basicConfig(level=logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# class ActionQueryReceiptAddress(Action):
-
-#     def name(self):
-#         return "action_query_receipt_address"
-
-#     def run(self, dispatcher, tracker, domain):
-#         logger.info("ActionQueryReceiptAddress run()")
-#         dispatcher.utter_message("您的筹药申请已经通过，请将发票邮寄到如下地址： 武汉市武昌区邮政速递水果湖揽投部 收件人：医药筹福可维 联系电话 ：027-59425239 （所有邮寄方式仅限邮政EMS）温馨提示：a.仅需邮寄发票原件即可；b.因为申请量大，邮寄地址填写批量收件地址更快捷，请放心填写。")
-#         return []
 class QueryReceiptForm(FormAction):
-    """Collects sales information and adds it to the spreadsheet"""
+    """查询发票邮寄地址"""
 
     def name(self):
         return "query_receipt_form"
@@ -85,14 +57,12 @@ class QueryReceiptForm(FormAction):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict]:
-        """Once we have all the information, attempt to add it to the
-        Google Drive database"""
-        
         dispatcher.utter_message("您的筹药申请已经通过，请将发票邮寄到如下地址： 武汉市武昌区邮政速递水果湖揽投部 收件人：医药筹福可维 联系电话 ：027-59425239 （所有邮寄方式仅限邮政EMS）温馨提示：a.仅需邮寄发票原件即可；b.因为申请量大，邮寄地址填写批量收件地址更快捷，请放心填写。")
         return []
 
 class QueryDrugstoreForm(FormAction):
-    
+    """查询领药药房"""
+
     def name(self):
         return "query_drugstore_form"
 
@@ -126,27 +96,9 @@ class QueryDrugstoreForm(FormAction):
     ) -> List[Dict]:
         dispatcher.utter_message("您的筹药申请已经通过，您的领药地址是：邯郸医药大厦连锁有限公司；药房地址：邯郸市中华南大街1号；药房联系电话：0797-8277239。 本人直接凭身份证原件及正反两面复印件、处方原件领取药品；亲属代领请携带患者身份证原件及正反两面复印件、处方原件、领药委托书、患者手持一周内报纸拍摄的影像材料、代领人身份证原件及正反两面复印件。")
         return []
-# class ActionQueryDrugstore(Action):
-
-#     def name(self):
-#         return "action_query_drugstore"
-
-#     def run(self, dispatcher, tracker, domain):
-#         logger.info("ActionQueryDrugstore run()")
-#         dispatcher.utter_message("您的筹药申请已经通过，您的领药地址是：邯郸医药大厦连锁有限公司；药房地址：邯郸市中华南大街1号；药房联系电话：0797-8277239。 本人直接凭身份证原件及正反两面复印件、处方原件领取药品；亲属代领请携带患者身份证原件及正反两面复印件、处方原件、领药委托书、患者手持一周内报纸拍摄的影像材料、代领人身份证原件及正反两面复印件。")
-#         return []
-
-# class ActionQueryApplyCity(Action):
-
-#     def name(self):
-#         return "action_query_apply_city"
-
-#     def run(self, dispatcher, tracker, domain):
-#         logger.info("ActionQueryApplyCity run()")
-#         dispatcher.utter_message("本地市有合作药房。")
-#         return []
 
 class QueryApplyCityForm(FormAction):
+    """查询城市药房"""
 
     def name(self):
         return "query_apply_city_form"
@@ -175,18 +127,9 @@ class QueryApplyCityForm(FormAction):
         dispatcher.utter_message("本地市有合作药房。")
         return []
 
-# class ActionQueryAuditProgress(Action):
-
-#     def name(self):
-#         return "action_query_audit_progress"
-
-#     def run(self, dispatcher, tracker, domain):
-#         logger.info("ActionQueryAuditProgress run()")
-#         dispatcher.utter_message("江小白福可维第11次审核通过，您的领药药房：邯郸医药大厦连锁有限公司；药房地址：邯郸市中华南大街1号；领药日期：2019-06-18；药房联系电话：0797-8277239")
-#         return []
-
 class QueryAuditProgressForm(FormAction):
-
+    """查询申请进度"""
+    
     def name(self):
         return "query_audit_progress_form"
 
@@ -217,10 +160,11 @@ class QueryAuditProgressForm(FormAction):
         dispatcher.utter_message("江小白福可维第11次审核通过，您的领药药房：邯郸医药大厦连锁有限公司；药房地址：邯郸市中华南大街1号；领药日期：2019-06-18；药房联系电话：0797-8277239")
         return []
 
-class AskInvoiceLossForm(FormAction):
+class IssueInvoiceLossForm(FormAction):
+    """问题：发票丢失问题"""
 
     def name(self):
-        return "ask_invoice_form"
+        return "issue_invoice_loss_form"
 
     @staticmethod
     def required_slots(tracker):
@@ -242,26 +186,27 @@ class AskInvoiceLossForm(FormAction):
     ) -> List[Dict]:
         apply_drug = tracker.get_slot('apply_drug')
         if(apply_drug == '福可维'):
-            dispatcher.utter_template('utter_invoice_loss_fkw', tracker)
+            dispatcher.utter_message(template='utter_invoice_loss_fkw')
         elif(apply_drug == '瑞复美'):
-            dispatcher.utter_template('utter_invoice_loss_rfm', tracker)
+            dispatcher.utter_message(template='utter_invoice_loss_rfm')
         elif(apply_drug == '脑脉利'):
-            dispatcher.utter_template('utter_invoice_loss_nml', tracker)
+            dispatcher.utter_message(template='utter_invoice_loss_nml')
         elif(apply_drug == '益久'):
-            dispatcher.utter_template('utter_invoice_loss_yj', tracker)
+            dispatcher.utter_message(template='utter_invoice_loss_yj')
         else:
             dispatcher.utter_message('抱歉，无法确认您申请的药品')
         return []
 
-class AskInvoiceReimbursementForm(FormAction):
-
+class IssueInvoiceReimbursementForm(FormAction):
+    """问题：发票已报销"""
+    
     def name(self):
-        return "ask_invoice_reimbursement_form"
+        return "issue_invoice_reimbursement_form"
 
     @staticmethod
     def required_slots(tracker):
         if(tracker.get_slot('apply_drug') == '福可维'):
-            return ["apply_drug", "is_imburse"]
+            return ["apply_drug", "is_reimburse"]
         else:
             return ["apply_drug"]
     
@@ -271,19 +216,12 @@ class AskInvoiceReimbursementForm(FormAction):
                 self.from_entity(entity="apply_drug"),
                 self.from_text()
             ],
-            "is_imburse": [
+            "is_reimburse": [
                 self.from_intent(intent="affirm",value=True),
                 self.from_intent(intent="deny",value=False),
             ]
         }
 
-    # def validate_apply_drug(self, value, dispatcher, tracker, domain):
-    #     if tracker.get_slot("apply_drug") == '福可维':
-    #         return {"apply_drug": value}
-    #     else:
-    #         dispatcher.utter_template("utter_question_not_fit", tracker)
-    #         return {"apply_drug": None}
-    
     def submit(
         self,
         dispatcher: CollectingDispatcher,
@@ -291,36 +229,15 @@ class AskInvoiceReimbursementForm(FormAction):
         domain: Dict[Text, Any],
     ) -> List[Dict]:
         if(tracker.get_slot('apply_drug') != '福可维'):
-            dispatcher.utter_message(template="utter_question_not_fit", tracker)
+            dispatcher.utter_message(template="utter_question_not_fit")
         else:
-            if(tracker.get_slo == True):
-                dispatcher.utter_message(template="utter_drug_reimbursement_yes_fkw", tracker)
+            if(tracker.get_slot("is_reimburse") == True):
+                dispatcher.utter_message(template="utter_is_reimburse_yes_fkw")
             else:
-                dispatcher.utter_message(template="utter_drug_reimbursement_no_fkw", tracker)
+                dispatcher.utter_message(template="utter_is_reimburse_no_fkw")
                 
         return []
 
-# class ActionInvoiceReimbursement(Action):
-
-#     def name(self) -> Text:
-#         return "action_invoice_reimbursement"
-
-#     def run(
-#         self,
-#         dispatcher: CollectingDispatcher,
-#         tracker: Tracker,
-#         domain: Dict[Text, Any],
-#     ) -> List["Event"]:
-#         apply_drug = tracker.get_slot("apply_drug")
-#         if(apply_drug != None):
-#             if(apply_drug == "福可维"):
-#                 dispatcher.utter_template('utter_aks_drug_reimbursement', tracker)
-#             else:
-#                 dispatcher.utter_template('utter_question_not_fit', tracker)
-#         else:
-#             dispatcher.utter_template("utter_ask_apply_drug",tracker)
-
-#         return []
 
 class ActionDefaultAskAffirmation(Action):
     """Asks for an affirmation of the intent if NLU threshold is not met."""
@@ -417,12 +334,12 @@ class ActionDefaultFallback(Action):
             and tracker.events[-4].get("name") == "action_default_ask_affirmation"
         ):
 
-            dispatcher.utter_template("utter_restart_with_button", tracker)
+            dispatcher.utter_message(template="utter_restart_with_button")
 
             # return [SlotSet("feedback_value", "negative"), ConversationPaused()]
             return []
 
         # Fallback caused by Core
         else:
-            dispatcher.utter_template("utter_default", tracker)
+            dispatcher.utter_message(template="utter_default")
             return [UserUtteranceReverted()]

@@ -120,7 +120,7 @@
 - 帮我查一下申请进度
 - 我的申请下来了吗
 
-## intent:ask_invoice_loss
+## intent:issue_invoice_loss
 - 我的发票丢了
 - 我的发票丢失
 - 发票丢失
@@ -156,7 +156,7 @@
 - 你好，发票原件有一张被医药公司遗失了，复印件行不行？
 - 患者的购药发票全部丢失该怎么处理
 
-## intent:ask_invoice_reimbursement
+## intent:issue_invoice_reimbursement
 - 我没报销
 - 我的发票没报销
 - 发票报销了
@@ -182,7 +182,7 @@
 - 发票上不止有[安罗替尼](apply_drug:福可维)还有其他的一些费用，所以需要报销用到
 - 我这个[安罗替尼](apply_drug:福可维)发票上有其他药品，报销的话，是只要[安罗替尼](apply_drug:福可维)证明没有报销，寄给你们就可以吗
 
-## intent: how_to_certificate_no_reimbursement
+## intent: how_to_certificate_no_reimburse
 - 没报销的证明怎么开？
 - 证明怎么开？
 - 去哪里开？
@@ -190,11 +190,6 @@
 - 证明怎么写？
 - 证明是什么格式？
 - 格式是什么？
-
-## intent: reimbursement_comfirm
-- 报销了
-- 报了
-- 报销过了
 
 ## intent:out_of_scope
 - 哈哈
@@ -211,6 +206,9 @@
 - 嗯
 - 嗯嗯
 - 是的
+- 报销了
+- 报了
+- 报销过了
 
 
 ## intent:deny

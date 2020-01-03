@@ -17,8 +17,9 @@ intents:
 - consult_fill_express
 - query_audit_progress
 - invoice_loss
-- ask_invoice_reimbursement
-- ask_invoice_loss
+- issue_invoice_reimbursement
+- issue_invoice_loss
+- how_to_certificate_no_reimburse
 - out_of_scope
 - affirm
 - deny
@@ -41,7 +42,7 @@ slots:
     - 益久
   apply_city:
     type: unfeaturized
-  is_imburse:
+  is_reimburse:
     type: unfeaturized
 templates:
   utter_greet:
@@ -56,6 +57,8 @@ templates:
   - text: 请输入您申请的药品，有福可维（安罗替尼）、瑞复美（来那度胺）、脑脉利、益久
   utter_ask_apply_city:
   - text: 请提供您要查询的城市或地区名称，如您所在的城市不在列表中，您也可以查询方便领药的邻近地市
+  utter_ask_is_reimburse:
+  - text: 请问发票中{apply_drug}药品是否报销？
   utter_consult_service_tel:
   - text: 医药筹平台热线：027-59425239 工作时间为周一至周五 9：00-17：30
   utter_consult_service_worktime:
@@ -97,18 +100,23 @@ templates:
   - text: 您申请脑脉利的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
   utter_invoice_loss_yj:
   - text: 您申请益久的筹药，若是购药发票原件丢失，您可以提供发票复印件或者底联复印件（需包含收费章）。
-  utter_aks_is_reimburse:
-  - text: 请问发票中{apply_drug}药品是否报销？
-  utter_drug_reimbursement_no_fkw:
+  utter_is_reimburse_no_fkw:
   - text: 1.安罗替尼（福可维）没有报销，那么您需要上传以下材料：1）购药发票的复印件加盖报销单位红章（医院发票还需提供对应的购药清单）；2）报销单位开具的安罗替尼未报销证明盖报销单位红章。
-  utter_drug_reimbursement_yes_fkw:
+  utter_is_reimburse_yes_fkw:
   - text: 非常抱歉，安罗替尼（福可维）报销之后是无法申请筹药的。
-  utter_invoice_no_reimbursement_certificate:
+  utter_invoice_no_reimburse_certificate:
   - text: 没有固定格式，您可以去报销单位开具安罗替尼（福可维）未报销的证明，注明清楚患者姓名，发票号，安罗替尼没有报销，并盖报销单位红章即可。
   utter_question_not_fit:
   - text: 你申请的{apply_drug}药品援助不存在此问题，正常申请即可。
   utter_good:
   - text: "👍"
+  utter_is_help:
+  - text: 是否解决您的疑问？
+    buttons:
+    - payload: /feedback_positive
+      title: 是
+    - payload: /feedback_nagetice
+      title: 否
 
 
 actions:
@@ -143,13 +151,12 @@ actions:
 - utter_invoice_loss_rfm
 - utter_invoice_loss_nml
 - utter_invoice_loss_yj
-- utter_aks_drug_reimbursement
-- utter_drug_reimbursement_no_fkw
-- utter_drug_reimbursement_yes_fkw
-- utter_invoice_no_reimbursement_certificate
+- utter_is_reimburse_no_fkw
+- utter_is_reimburse_yes_fkw
+- utter_invoice_no_reimburse_certificate
 - utter_question_not_fit
 - utter_good
-# - action_invoice_reimbursement
+- utter_is_help
 
 
 forms:
@@ -157,5 +164,5 @@ forms:
 - query_drugstore_form
 - query_apply_city_form
 - query_audit_progress_form
-- ask_invoice_form
-- ask_invoice_reimbursement_form
+- issue_invoice_loss_form
+- issue_invoice_reimbursement_form
