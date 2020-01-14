@@ -20,9 +20,11 @@ intents:
 - issue_invoice_reimbursement
 - issue_invoice_loss
 - how_to_certificate_no_reimburse
+- consult_invoice_return
 - out_of_scope
 - affirm
 - deny
+
 entities:
 - patient_name
 - phone-number
@@ -78,8 +80,10 @@ templates:
   utter_restart_with_button:
   - buttons:
     - payload: /restart
-      title: 重新对话
-    text: 点击按钮重新开始对话.
+      title: Restart
+    text: Click the button below if you want to start over.
+  utter_restart:
+    - text: "我又满血复活啦"
   utter_default:
   - text: "抱歉，没明白 🤷. 您能重新组织下语言吗?"
   utter_out_of_scope:
@@ -106,6 +110,8 @@ templates:
   - text: 非常抱歉，安罗替尼（福可维）报销之后是无法申请筹药的。
   utter_invoice_no_reimburse_certificate:
   - text: 没有固定格式，您可以去报销单位开具安罗替尼（福可维）未报销的证明，注明清楚患者姓名，发票号，安罗替尼没有报销，并盖报销单位红章即可。
+  utter_consult_invoice_return:
+  - text: 非常抱歉，安罗替尼的购药发票不予回寄。
   utter_question_not_fit:
   - text: 你申请的{apply_drug}药品援助不存在此问题，正常申请即可。
   utter_good:
@@ -154,6 +160,7 @@ actions:
 - utter_is_reimburse_no_fkw
 - utter_is_reimburse_yes_fkw
 - utter_invoice_no_reimburse_certificate
+- utter_consult_invoice_return
 - utter_question_not_fit
 - utter_good
 - utter_is_help

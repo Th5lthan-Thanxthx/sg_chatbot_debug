@@ -10,7 +10,7 @@ import json
 from typing import Text, Dict, Any, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.forms import FormAction
-from rasa_sdk.events import UserUtteranceReverted
+from rasa_sdk.events import SlotSet,UserUtteranceReverted,ConversationPaused
 from rasa_sdk.executor import CollectingDispatcher
 
 logging.basicConfig(level=logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -24,6 +24,7 @@ class QueryReceiptForm(FormAction):
 
     @staticmethod
     def required_slots(tracker):
+        
         return [
             "patient_name",
             "phone-number",
@@ -195,7 +196,7 @@ class IssueInvoiceLossForm(FormAction):
             dispatcher.utter_message(template='utter_invoice_loss_yj')
         else:
             dispatcher.utter_message('抱歉，无法确认您申请的药品')
-        return []
+        return [SlotSet("apply_drug",None)]
 
 class IssueInvoiceReimbursementForm(FormAction):
     """问题：发票已报销"""
@@ -272,8 +273,12 @@ class ActionDefaultAskAffirmation(Action):
         first_intent_names = [
             intent.get("name", "")
             for intent in intent_ranking
-            if intent.get("name", "") != "out_of_scope"
+            if intent.get("name", "") != "out_of_scope" and intent.get("name","") != None
         ]
+
+        if(len(first_intent_names) < 1):
+            dispatcher.utter_message(template="utter_default")
+            return [UserUtteranceReverted()]
 
         message_title = (
             "不好意思，没太明白您的意思 🤔 您的意思是..."
@@ -295,9 +300,9 @@ class ActionDefaultAskAffirmation(Action):
                 }
             )
 
-        buttons.append({"title": "都不是", "payload": "/out_of_scope"})
+        # buttons.append({"title": "都不是", "payload": "/out_of_scope"})
 
-        dispatcher.utter_button_message(message_title, buttons=buttons)
+        dispatcher.utter_message(text=message_title, buttons=buttons)
 
         return []
 
@@ -336,8 +341,7 @@ class ActionDefaultFallback(Action):
 
             dispatcher.utter_message(template="utter_restart_with_button")
 
-            # return [SlotSet("feedback_value", "negative"), ConversationPaused()]
-            return []
+            return [ConversationPaused()]
 
         # Fallback caused by Core
         else:

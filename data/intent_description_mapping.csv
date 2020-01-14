@@ -1,14 +1,15 @@
 intent,button,entities
+issue_invoice_loss,发票丢了,一个实体
 greet,请问在吗,
 goodbye,再见,
 enter_data,输入信息?,
 query_receipt_address,我想查询一下发票邮寄地址?,
 query_drugstore,我想查询一下药房地址?,
-query_apply_city,我想查询申请时选哪个城市?
+query_apply_city,我想查询申请时选哪个城市?,
 provide_apply_city,输入申请城市?,
 consult_service_tel,我想查询你们电话是多少?,
 consult_service_worktime,你们工作时间是多少?,
 consult_platform,你们是什么平台?,
-consult_application_materials,需要什么材料?
+consult_application_materials,需要什么材料?,
 consult_fill_express,在哪里填写快递单号?,
 query_audit_progress,帮我查一下进度.,
