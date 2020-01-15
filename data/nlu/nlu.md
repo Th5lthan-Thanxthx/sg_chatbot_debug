@@ -14,6 +14,8 @@
 ## intent:goodbye
 - 再见
 - 再见了
+- 拜拜
+- 拜
 - bye
 - goodbye
 
