@@ -24,3 +24,6 @@ run-x:
 
 validate:
 	rasa data validate
+
+visualize:
+	rasa visualize -d domain.yml -s data/core/stories.md  -c config.yml --out graph.html
