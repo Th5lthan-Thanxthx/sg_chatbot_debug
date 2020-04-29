@@ -1,4 +1,4 @@
-## query receipt address
+## 查询发票邮寄地址
 * greet
   - utter_greet
 * query_receipt_address
@@ -30,7 +30,7 @@
   - action_deactivate_form
   - form{"name": null}
 
-## query drugstore
+## 查询药房地址
 * greet
   - utter_greet
 * query_drugstore
@@ -63,7 +63,7 @@
   - form{"name": null}
 
 
-## query apply city
+## 查询申请城市
 * greet
   - utter_greet
 * query_apply_city
@@ -95,7 +95,7 @@
   - action_deactivate_form
   - form{"name": null}
 
-## query audit progress
+## 查询审核进度
 * greet
   - utter_greet
 * query_audit_progress

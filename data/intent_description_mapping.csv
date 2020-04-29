@@ -1,5 +1,5 @@
 intent,button,entities
-issue_invoice_loss,发票丢了,一个实体
+trouble_invoice_loss,发票丢了,一个实体
 greet,请问在吗,
 goodbye,再见,
 enter_data,输入信息?,

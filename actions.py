@@ -7,17 +7,18 @@
 
 import logging
 import json
+import requests
 from typing import Text, Dict, Any, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.forms import FormAction
-from rasa_sdk.events import SlotSet,UserUtteranceReverted,ConversationPaused
+from rasa_sdk.events import SlotSet,UserUtteranceReverted,ConversationPaused,Restarted
 from rasa_sdk.executor import CollectingDispatcher
 
-logging.basicConfig(level=logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 class QueryReceiptForm(FormAction):
-    """查询发票邮寄地址"""
+    """查询：发票邮寄地址"""
 
     def name(self):
         return "query_receipt_form"
@@ -62,7 +63,7 @@ class QueryReceiptForm(FormAction):
         return []
 
 class QueryDrugstoreForm(FormAction):
-    """查询领药药房"""
+    """查询：领药药房"""
 
     def name(self):
         return "query_drugstore_form"
@@ -99,7 +100,7 @@ class QueryDrugstoreForm(FormAction):
         return []
 
 class QueryApplyCityForm(FormAction):
-    """查询城市药房"""
+    """查询：城市药房"""
 
     def name(self):
         return "query_apply_city_form"
@@ -129,7 +130,7 @@ class QueryApplyCityForm(FormAction):
         return []
 
 class QueryAuditProgressForm(FormAction):
-    """查询申请进度"""
+    """查询：申请进度"""
     
     def name(self):
         return "query_audit_progress_form"
@@ -161,11 +162,11 @@ class QueryAuditProgressForm(FormAction):
         dispatcher.utter_message("江小白福可维第11次审核通过，您的领药药房：邯郸医药大厦连锁有限公司；药房地址：邯郸市中华南大街1号；领药日期：2019-06-18；药房联系电话：0797-8277239")
         return []
 
-class IssueInvoiceLossForm(FormAction):
+class TroubleInvoiceLossForm(FormAction):
     """问题：发票丢失问题"""
 
     def name(self):
-        return "issue_invoice_loss_form"
+        return "trouble_invoice_loss_form"
 
     @staticmethod
     def required_slots(tracker):
@@ -198,15 +199,16 @@ class IssueInvoiceLossForm(FormAction):
             dispatcher.utter_message('抱歉，无法确认您申请的药品')
         return [SlotSet("apply_drug",None)]
 
-class IssueInvoiceReimbursementForm(FormAction):
+class TroubleInvoiceReimbursementForm(FormAction):
     """问题：发票已报销"""
     
     def name(self):
-        return "issue_invoice_reimbursement_form"
+        return "trouble_invoice_reimbursement_form"
 
     @staticmethod
     def required_slots(tracker):
-        if(tracker.get_slot('apply_drug') == '福可维'):
+        slot = tracker.get_slot('apply_drug')
+        if( (isinstance(slot,list) and '福可维' in slot) or slot == '福可维'):
             return ["apply_drug", "is_reimburse"]
         else:
             return ["apply_drug"]
@@ -229,13 +231,14 @@ class IssueInvoiceReimbursementForm(FormAction):
         tracker : Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict]:
-        if(tracker.get_slot('apply_drug') != '福可维'):
-            dispatcher.utter_message(template="utter_question_not_fit")
-        else:
+        slot = tracker.get_slot('apply_drug')
+        if( (isinstance(slot,list) and '福可维' in slot) or slot == '福可维'):
             if(tracker.get_slot("is_reimburse") == True):
-                dispatcher.utter_message(template="utter_is_reimburse_yes_fkw")
+                dispatcher.utter_message(template="utter_is_reimburse_fkw_yes")
             else:
-                dispatcher.utter_message(template="utter_is_reimburse_no_fkw")
+                dispatcher.utter_message(template="utter_is_reimburse_fkw_no")
+        else:
+            dispatcher.utter_message(template="utter_question_not_fit")
                 
         return []
 
@@ -347,3 +350,18 @@ class ActionDefaultFallback(Action):
         else:
             dispatcher.utter_message(template="utter_default")
             return [UserUtteranceReverted()]
+
+class ActionRestartTracker(Action):
+    """ 单个问题结束后清楚所有slot,下个问题重新开始"""
+
+    def name(self):
+        return "action_restart_tracker"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> List["Event"]:
+    
+        return [Restarted()]

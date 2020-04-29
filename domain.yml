@@ -17,13 +17,15 @@ intents:
 - consult_fill_express
 - query_audit_progress
 - invoice_loss
-- issue_invoice_reimbursement
-- issue_invoice_loss
+- trouble_invoice_reimbursement
+- trouble_invoice_loss
 - how_to_certificate_no_reimburse
 - consult_invoice_return
 - out_of_scope
 - affirm
 - deny
+- feedback_nagetive
+- feedback_positive
 
 entities:
 - patient_name
@@ -52,7 +54,7 @@ templates:
   utter_goodbye:
   - text: 非常感谢您的咨询，祝您生活愉快！再见！
   utter_ask_patient_name:
-  - text: 为了更好的为您提供服务，请提供您的姓名
+  - text: 为了更好的为您提供服务，请提供您的姓名，直接输入姓名即可。
   utter_ask_phone-number:
   - text: 您好{patient_name}，请提供您的手机号码
   utter_ask_apply_drug:
@@ -83,11 +85,11 @@ templates:
       title: Restart
     text: Click the button below if you want to start over.
   utter_restart:
-    - text: "我又满血复活啦"
+    - text: 我又满血复活啦
   utter_default:
-  - text: "抱歉，没明白 🤷. 您能重新组织下语言吗?"
+  - text: 抱歉，没明白 🤷. 您能重新组织下语言吗?
   utter_out_of_scope:
-  - text: "抱歉帮不了您！"
+  - text: 抱歉帮不了您！
   utter_ask_continue_query_receipt:
   - text: 您想继续查询快递地址吗?
   utter_ask_continue_query_drugstore:
@@ -104,25 +106,29 @@ templates:
   - text: 您申请脑脉利的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
   utter_invoice_loss_yj:
   - text: 您申请益久的筹药，若是购药发票原件丢失，您可以提供发票复印件或者底联复印件（需包含收费章）。
-  utter_is_reimburse_no_fkw:
+  utter_is_reimburse_fkw_no:
   - text: 1.安罗替尼（福可维）没有报销，那么您需要上传以下材料：1）购药发票的复印件加盖报销单位红章（医院发票还需提供对应的购药清单）；2）报销单位开具的安罗替尼未报销证明盖报销单位红章。
-  utter_is_reimburse_yes_fkw:
+  utter_is_reimburse_fkw_yes:
   - text: 非常抱歉，安罗替尼（福可维）报销之后是无法申请筹药的。
-  utter_invoice_no_reimburse_certificate:
+  utter_how_to_certificate_no_reimburse:
   - text: 没有固定格式，您可以去报销单位开具安罗替尼（福可维）未报销的证明，注明清楚患者姓名，发票号，安罗替尼没有报销，并盖报销单位红章即可。
   utter_consult_invoice_return:
   - text: 非常抱歉，安罗替尼的购药发票不予回寄。
   utter_question_not_fit:
   - text: 你申请的{apply_drug}药品援助不存在此问题，正常申请即可。
   utter_good:
-  - text: "👍"
+  - text: 👍
   utter_is_help:
   - text: 是否解决您的疑问？
     buttons:
     - payload: /feedback_positive
       title: 是
-    - payload: /feedback_nagetice
+    - payload: /feedback_nagetive
       title: 否
+  utter_feedback_nagetive:
+  - text: 抱歉，目前还无法帮助您，您可以转人工客服寻求帮助。
+  utter_feedback_positive:
+  - text: 很高兴能帮到您，您可以继续咨询其他问题。
 
 
 actions:
@@ -146,6 +152,7 @@ actions:
 - action_query_audit_progress
 - action_default_fallback
 - action_default_ask_affirmation
+- action_restart_tracker
 - utter_restart_with_button
 - utter_default
 - utter_out_of_scope
@@ -157,13 +164,15 @@ actions:
 - utter_invoice_loss_rfm
 - utter_invoice_loss_nml
 - utter_invoice_loss_yj
-- utter_is_reimburse_no_fkw
-- utter_is_reimburse_yes_fkw
-- utter_invoice_no_reimburse_certificate
+- utter_is_reimburse_fkw_no
+- utter_is_reimburse_fkw_yes
+- utter_how_to_certificate_no_reimburse
 - utter_consult_invoice_return
 - utter_question_not_fit
 - utter_good
 - utter_is_help
+- utter_feedback_nagetive
+- utter_feedback_positive
 
 
 forms:
@@ -171,5 +180,5 @@ forms:
 - query_drugstore_form
 - query_apply_city_form
 - query_audit_progress_form
-- issue_invoice_loss_form
-- issue_invoice_reimbursement_form
+- trouble_invoice_loss_form
+- trouble_invoice_reimbursement_form
