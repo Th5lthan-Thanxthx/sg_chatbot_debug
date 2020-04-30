@@ -13,8 +13,9 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.forms import FormAction
 from rasa_sdk.events import SlotSet,UserUtteranceReverted,ConversationPaused,Restarted
 from rasa_sdk.executor import CollectingDispatcher
+from api import queryApi
 
-logging.basicConfig(level=logging.DEBUG,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 class QueryReceiptForm(FormAction):
@@ -59,7 +60,10 @@ class QueryReceiptForm(FormAction):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict]:
-        dispatcher.utter_message("您的筹药申请已经通过，请将发票邮寄到如下地址： 武汉市武昌区邮政速递水果湖揽投部 收件人：医药筹福可维 联系电话 ：027-59425239 （所有邮寄方式仅限邮政EMS）温馨提示：a.仅需邮寄发票原件即可；b.因为申请量大，邮寄地址填写批量收件地址更快捷，请放心填写。")
+        post_data = {'name':tracker.get_slot('patient_name'), 'mobile':tracker.get_slot('phone-number'), 'apply_drug':tracker.get_slot('apply_drug')}
+        yyc_query = queryApi.yycQuery()
+        res = yyc_query.query_receipt(post_data)
+        dispatcher.utter_message(res['text'])
         return []
 
 class QueryDrugstoreForm(FormAction):
@@ -96,7 +100,11 @@ class QueryDrugstoreForm(FormAction):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict]:
-        dispatcher.utter_message("您的筹药申请已经通过，您的领药地址是：邯郸医药大厦连锁有限公司；药房地址：邯郸市中华南大街1号；药房联系电话：0797-8277239。 本人直接凭身份证原件及正反两面复印件、处方原件领取药品；亲属代领请携带患者身份证原件及正反两面复印件、处方原件、领药委托书、患者手持一周内报纸拍摄的影像材料、代领人身份证原件及正反两面复印件。")
+        yyc_query = queryApi.yycQuery()
+        post_data = {'name':tracker.get_slot('patient_name'), 'mobile':tracker.get_slot('phone-number'), 'apply_drug':tracker.get_slot('apply_drug')}
+        res = yyc_query.query_drugstore(post_data)
+        # info = {'dr_name':res['dr_name'],'dr_mobile':res['dr_mobile']}
+        dispatcher.utter_message("您的筹药申请已经通过，您的领药地址是：{dr_name}；药房地址：邯郸市中华南大街1号；药房联系电话：{dr_mobile}。 本人直接凭身份证原件及正反两面复印件、处方原件领取药品；亲属代领请携带患者身份证原件及正反两面复印件、处方原件、领药委托书、患者手持一周内报纸拍摄的影像材料、代领人身份证原件及正反两面复印件。".format(**res))
         return []
 
 class QueryApplyCityForm(FormAction):

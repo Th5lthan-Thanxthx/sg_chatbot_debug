@@ -14,4 +14,5 @@ rasa.db-wal
 models/*
 .DS_Store
 ._.DS_Store
+**/__pycache__
 
