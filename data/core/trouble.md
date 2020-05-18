@@ -461,6 +461,27 @@
   - form{"name": null}
   - utter_is_help
 
+## 发票丢失 + 发票报销
+* trouble_invoice_loss
+  - trouble_invoice_loss_form
+  - form{"name": "trouble_invoice_loss_form"}
+* trouble_invoice_reimbursement
+  - action_deactivate_form
+  - form{"name": null}
+  - trouble_invoice_reimbursement_form
+  - form{"name": null}
+
+## 发票报销 + 发票丢失
+* trouble_invoice_reimbursement
+  - trouble_invoice_reimbursement_form
+  - form{"name": "trouble_invoice_reimbursement_form"}
+* trouble_invoice_loss
+  - action_deactivate_form
+  - form{"name": null}
+  - trouble_invoice_loss_form
+  - form{"name": null}
+
+
 
 
 
