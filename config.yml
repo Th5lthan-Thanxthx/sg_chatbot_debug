@@ -2,7 +2,7 @@ language: zh
 
 pipeline:
 - name: JiebaTokenizer
-- name: CRFEntityExtractor
+# - name: CRFEntityExtractor
 - name: DucklingHTTPExtractor
   language: zh$core
   url: http://localhost:8000
@@ -11,20 +11,43 @@ pipeline:
   - duration
   - phone-number
 - name: EntitySynonymMapper
-- name: CountVectorsFeaturizer
-  OOV_token: oov
-  token_pattern: (?u)\b\w+\b
-- name: EmbeddingIntentClassifier
+# - name: CountVectorsFeaturizer
+#   OOV_token: oov
+#   token_pattern: (?u)\b\w+\b
+- name: LexicalSyntacticFeaturizer
+  features: [
+    ["low", "title", "upper"],
+    [
+      "BOS",
+      "EOS",
+      "low",
+      "prefix5",
+      "prefix2",
+      "suffix5",
+      "suffix3",
+      "suffix2",
+      "upper",
+      "title",
+      "digit",
+    ],
+    ["low", "title", "upper"],
+  ]
+- name: DIETClassifier
+  number_of_transformer_layers: 0
+- name: ResponseSelector
+  epochs: 100
+
 
 policies:
 - name: FormPolicy
-- max_history: 6
-  name: AugmentedMemoizationPolicy
 - name: MappingPolicy
-- name: EmbeddingPolicy
-  max_history: 6
+- name: AugmentedMemoizationPolicy
+  max_history: 10
+- name: TEDPolicy
+  max_history: 10
   epochs: 20
   batch_size: [32,64]
-- core_threshold: 0.3
-  name: TwoStageFallbackPolicy
+- name: TwoStageFallbackPolicy
+  core_threshold: 0.3
   nlu_threshold: 0.8
+  deny_suggestion_intent_name: "out_of_scope"

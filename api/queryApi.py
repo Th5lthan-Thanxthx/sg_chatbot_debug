@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 class yycQuery(object):
     def __init__(self):
-        self.base_url = 'http://192.168.0.70/chat';
+        self.base_url = 'http://192.168.0.88/chat';
         self.url = '';
 
     def query_receipt(self, post_data={}):

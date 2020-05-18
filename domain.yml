@@ -1,184 +1,253 @@
 intents:
-- greet
-- goodbye
-- enter_data:
-    use_entities: false
-- query_receipt_address
-- provide_name
-- provide_tel
-- provide_drug
-- query_drugstore
-- query_apply_city
-- provide_apply_city
-- consult_service_tel
-- consult_service_worktime
-- consult_platform
-- consult_application_materials
-- consult_fill_express
-- query_audit_progress
-- invoice_loss
-- trouble_invoice_reimbursement
-- trouble_invoice_loss
-- how_to_certificate_no_reimburse
-- consult_invoice_return
-- out_of_scope
-- affirm
-- deny
-- feedback_nagetive
-- feedback_positive
+  - faq
+  - chitchat
+  - greet: {triggers: action_greet}
+  - goodbye
+  # - enter_data:
+  #     use_entities: false
+  - query_receipt_address
+  - query_drugstore
+  - query_apply_city
+  - query_audit_progress
+  - query_receive_date
+  - query_drugstore_mobile
+  # - provide_name
+  - provide_tel
+  - provide_drug
+  - provide_apply_city
+  # - consult_service_tel
+  # - consult_service_worktime
+  # - consult_platform
+  # - consult_application_materials
+  # - consult_fill_express
+  # - consult_invoice_return
+  # - invoice_loss
+  - trouble_invoice_reimbursement
+  - trouble_invoice_loss
+  - how_to_certificate_no_reimburse
+  - out_of_scope
+  - affirm
+  - deny
+  - feedback_nagetive
+  - feedback_positive
+
 
 entities:
-- patient_name
-- phone-number
-- apply_drug
-- apply_city
+  - patient_name
+  - phone-number
+  - apply_drug
+  - apply_city
+  - bza_type
+
+
 slots:
   patient_name:
     type: unfeaturized
   phone-number:
     type: unfeaturized
+  patient_idsn:
+    type: unfeaturized
   apply_drug:
     type: categorical
     values:
-    - 福可维
-    - 瑞复美
-    - 脑脉利
-    - 益久
+      - 福可维
+      - 瑞复美
+      - 脑脉利
+      - 益久
+      - 百泽安
+  bza_type:
+    type: unfeaturized
   apply_city:
     type: unfeaturized
   is_reimburse:
     type: unfeaturized
-templates:
+  drugstore_name:
+    type: unfeaturized
+
+
+responses:
   utter_greet:
-  - text: 您好，我是您的筹药顾问小智，很高兴为您服务。我可以为您快速查询地址、电话、进度、工作时间等信息。请问有什么可以帮助您？
+    - text: 您好，我是您的筹药顾问小智，很高兴为您服务。我可以为您快速查询地址、电话、进度、工作时间等信息。请问有什么可以帮助您？
+    # - test: 您好，请问需要什么帮助？
   utter_goodbye:
-  - text: 非常感谢您的咨询，祝您生活愉快！再见！
+    - text: 非常感谢您的咨询，祝您生活愉快！再见！
   utter_ask_patient_name:
-  - text: 为了更好的为您提供服务，请提供您的姓名，直接输入姓名即可。
+    - text: 为了更好的为您提供服务，请提供您的姓名，直接输入姓名即可。
   utter_ask_phone-number:
-  - text: 您好{patient_name}，请提供您的手机号码
+    - text: 您好{patient_name}，请提供您的手机号码
+  utter_ask_patient_idsn:
+    - text: 请您提供您的身份证号码，帮您查询
   utter_ask_apply_drug:
-  - text: 请输入您申请的药品，有福可维（安罗替尼）、瑞复美（来那度胺）、脑脉利、益久
+    - text: 请输入您申请的药品，有福可维（安罗替尼）、瑞复美（来那度胺）、脑脉利、益久、百泽安
   utter_ask_apply_city:
-  - text: 请提供您要查询的城市或地区名称，如您所在的城市不在列表中，您也可以查询方便领药的邻近地市
+    - text: 请提供您要查询的城市或地区名称，如您所在的城市不在列表中，您也可以查询方便领药的邻近地市
+  utter_ask_bza_type:
+    - text: 请问您是百泽安-康盟患者，还是百泽安-初保患者？
+      buttons:
+        - payload: /{"bza_type":"康盟"}
+          title: 康盟
+        - payload: /{"bza_type":"初保"}
+          title: 初保
   utter_ask_is_reimburse:
-  - text: 请问发票中{apply_drug}药品是否报销？
-  utter_consult_service_tel:
-  - text: 医药筹平台热线：027-59425239 工作时间为周一至周五 9：00-17：30
-  utter_consult_service_worktime:
-  - text: 顾问在线时间工作日周一至周五 9：00-12：00,13:00-18:00，医药筹平台热线工作时间为工作日周一至周五 9：00-17：30
-  utter_consult_platform:
-  - text: 医药筹平台是专业致力于帮助患者提供大病筹药/个人救助的信息发布服务的互联网平台，仅为发起人提供技术服务的网络渠道。医药筹平台是由中慈网络科技有限公司发起，由北京康盟慈善基金会、生命绿洲公益服务中心、中华社会救助基金会医疗公益基金提供定向募捐支持。平台帮患者筹集药品是完全免费的，不收取任何费用。
-  utter_consult_application_materials:
-  - text: 您好，首次申请需要提供：1.患者身份证复印件 2.本人及直系亲属户口本复印件3. 用药前和用药后影像学报告单(CT/MR)或X光报告单4.患者用药说明5.购药发票6.医生处方。如果是低保患者，还需要低保证明。
-  utter_consult_fill_express:
-  - text: 您可以直接在医药筹公众号提示您筹药成功的地方填写快递单号。
+    - text: 请问发票中{apply_drug}药品是否报销？
+  utter_ask_drugstore_name:
+    - text: 您好，请输入您想咨询的药房名称？
+  # utter_consult_service_tel:
+  # - text: 您好，医药筹的热线电话是：010-58103659，周一至周五9:00——17:30，您有任何疑问都可致电咨询 ；目前顾问在线时间是周一至周五 9：00-18:00。
+  # utter_consult_service_worktime:
+  #     - text: 顾问在线时间工作日周一至周五 9：00-12：00,13:00-18:00，医药筹平台热线工作时间为工作日周一至周五 9：00-17：30
+  # utter_consult_platform:
+  #   - text: 医药筹平台是专业致力于帮助患者提供大病筹药/个人救助的信息发布服务的互联网平台，仅为发起人提供技术服务的网络渠道。医药筹平台是由中慈网络科技有限公司发起，由北京康盟慈善基金会、生命绿洲公益服务中心、中华社会救助基金会医疗公益基金提供定向募捐支持。平台帮患者筹集药品是完全免费的，不收取任何费用。
+  # utter_consult_application_materials:
+  #   - text: 您好，首次申请需要提供：1.患者身份证复印件 2.本人及直系亲属户口本复印件3. 用药前和用药后影像学报告单(CT/MR)或X光报告单4.患者用药说明5.购药发票6.医生处方。如果是低保患者，还需要低保证明。
+  # utter_consult_fill_express:
+  #   - text: 您可以直接在医药筹公众号提示您筹药成功的地方填写快递单号。
   utter_no_patient_name:
-  - text: 抱歉，没有获取到您的姓名
+    - text: 抱歉，没有获取到您的姓名
   utter_no_phone-number:
-  - text: 抱歉，没有获取到您的手机号
+    - text: 抱歉，没有获取到您的手机号
   utter_no_apply_drug:
-  - text: 抱歉，没有获取到您的申请药品
+    - text: 抱歉，没有获取到您的申请药品
   utter_restart_with_button:
-  - buttons:
-    - payload: /restart
-      title: Restart
-    text: Click the button below if you want to start over.
+    - text: 点击按钮重新开始对话.
+      buttons:
+        - payload: /restart
+          title: 重新开始
   utter_restart:
     - text: 我又满血复活啦
   utter_default:
-  - text: 抱歉，没明白 🤷. 您能重新组织下语言吗?
+    - text: 抱歉，无法理解您的意思。
+  utter_default_with_human:
+    - text: 抱歉，我还是还无法理解您的需求，您可以转人工客服寻求帮助。
+      buttons:
+        - payload: /handoff_to_human
+          title: 转人工客服
   utter_out_of_scope:
-  - text: 抱歉帮不了您！
+    - text: 抱歉,我暂时处理不了这个问题！
+  utter_ask_continue_trouble_invoice_loss:
+    - text: 您想继续咨询发票丢失了的问题吗?
+  utter_ask_continue_trouble_invoice_reimbursement:
+    - text: 您想继续咨询发票报销了的问题吗?
   utter_ask_continue_query_receipt:
-  - text: 您想继续查询快递地址吗?
+    - text: 您想继续查询快递地址吗?
   utter_ask_continue_query_drugstore:
-  - text: 您想继续查询药房吗?
+    - text: 您想继续查询药房吗?
   utter_ask_continue_query_apply_city:
-  - text: 您想继续查询申请城市吗?
+    - text: 您想继续查询申请城市吗?
   utter_ask_continue_query_audit_progress:
-  - text: 您想继续查询申请进度吗？
+    - text: 您想继续查询申请进度吗？
+  utter_ask_continue_query_receive_date:
+    - text: 您想继续查询领药日期吗？
+  utter_ask_continue_query_drugstore_mobile:
+    - text: 您想继续查询药房电话吗？
   utter_invoice_loss_fkw:
-  - text: 非常抱歉，申请安罗替尼（福可维）的筹药需要提供全价未报销的购药发票原件的，如果发票丢失，是无法提供清单、底联等材料代替发票申请筹药的。
+    - text: 非常抱歉，申请安罗替尼（福可维）的筹药需要提供全价未报销的购药发票原件的，如果发票丢失，是无法提供清单、底联等材料代替发票申请筹药的。
   utter_invoice_loss_rfm:
-  - text: 您申请瑞复美的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
+    - text: 您申请瑞复美的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
   utter_invoice_loss_nml:
-  - text: 您申请脑脉利的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
+    - text: 您申请脑脉利的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
   utter_invoice_loss_yj:
-  - text: 您申请益久的筹药，若是购药发票原件丢失，您可以提供发票复印件或者底联复印件（需包含收费章）。
+    - text: 您申请益久的筹药，若是购药发票原件丢失，您可以提供发票复印件或者底联复印件（需包含收费章）。
+  utter_invoice_loss_bza:
+    - text: 您申请百泽安的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
   utter_is_reimburse_fkw_no:
-  - text: 1.安罗替尼（福可维）没有报销，那么您需要上传以下材料：1）购药发票的复印件加盖报销单位红章（医院发票还需提供对应的购药清单）；2）报销单位开具的安罗替尼未报销证明盖报销单位红章。
+    - text: 1.安罗替尼（福可维）没有报销，那么您需要上传以下材料：1）购药发票的复印件加盖报销单位红章（医院发票还需提供对应的购药清单）；2）报销单位开具的安罗替尼未报销证明盖报销单位红章。
   utter_is_reimburse_fkw_yes:
-  - text: 非常抱歉，安罗替尼（福可维）报销之后是无法申请筹药的。
+    - text: 非常抱歉，安罗替尼（福可维）报销之后是无法申请筹药的。
   utter_how_to_certificate_no_reimburse:
-  - text: 没有固定格式，您可以去报销单位开具安罗替尼（福可维）未报销的证明，注明清楚患者姓名，发票号，安罗替尼没有报销，并盖报销单位红章即可。
-  utter_consult_invoice_return:
-  - text: 非常抱歉，安罗替尼的购药发票不予回寄。
+    - text: 没有固定格式，您可以去报销单位开具安罗替尼（福可维）未报销的证明，注明清楚患者姓名，发票号，安罗替尼没有报销，并盖报销单位红章即可。
+  # utter_consult_invoice_return:
+  #   - text: 非常抱歉，安罗替尼的购药发票不予回寄。
   utter_question_not_fit:
-  - text: 你申请的{apply_drug}药品援助不存在此问题，正常申请即可。
-  utter_good:
-  - text: 👍
+    - text: 你申请的{apply_drug}药品援助不存在此问题，正常申请即可。
+  utter_thumbsup:
+    - text: 👍
+  utter_ok:
+    - text: "好的! 👍"
+    - text: "行的! "
   utter_is_help:
-  - text: 是否解决您的疑问？
-    buttons:
-    - payload: /feedback_positive
-      title: 是
-    - payload: /feedback_nagetive
-      title: 否
+    - text: 是否解决您的疑问？
+      buttons:
+        - payload: /feedback_positive
+          title: 是
+        - payload: /feedback_nagetive
+          title: 否
   utter_feedback_nagetive:
-  - text: 抱歉，目前还无法帮助您，您可以转人工客服寻求帮助。
+    - text: 抱歉，目前还无法帮助您，您可以转人工客服寻求帮助。
+      buttons:
+        - payload: /handoff_to_human
+          title: 转人工客服
   utter_feedback_positive:
-  - text: 很高兴能帮到您，您可以继续咨询其他问题。
+    - text: 很高兴能帮到您，您可以继续咨询其他问题。
 
 
 actions:
-- utter_greet
-- utter_goodbye
-- utter_ask_patient_name
-- utter_ask_phone-number
-- utter_ask_apply_drug
-- utter_ask_apply_city
-- utter_no_patient_name
-- utter_no_phone-number
-- utter_no_apply_drug
-- utter_consult_service_tel
-- utter_consult_service_worktime
-- utter_consult_platform
-- utter_consult_application_materials
-- utter_consult_fill_express
-- action_query_receipt_address
-- action_query_drugstore
-- action_query_apply_city
-- action_query_audit_progress
-- action_default_fallback
-- action_default_ask_affirmation
-- action_restart_tracker
-- utter_restart_with_button
-- utter_default
-- utter_out_of_scope
-- utter_ask_continue_query_receipt
-- utter_ask_continue_query_drugstore
-- utter_ask_continue_query_apply_city
-- utter_ask_continue_query_audit_progress
-- utter_invoice_loss_fkw
-- utter_invoice_loss_rfm
-- utter_invoice_loss_nml
-- utter_invoice_loss_yj
-- utter_is_reimburse_fkw_no
-- utter_is_reimburse_fkw_yes
-- utter_how_to_certificate_no_reimburse
-- utter_consult_invoice_return
-- utter_question_not_fit
-- utter_good
-- utter_is_help
-- utter_feedback_nagetive
-- utter_feedback_positive
+  - respond_faq
+  - respond_chitchat
+  - utter_goodbye
+  - utter_ask_patient_name
+  - utter_ask_phone-number
+  - utter_ask_patient_idsn
+  - utter_ask_apply_drug
+  - utter_ask_apply_city
+  - utter_ask_bza_type
+  - utter_ask_continue_query_receipt
+  - utter_ask_continue_query_drugstore
+  - utter_ask_continue_query_apply_city
+  - utter_ask_continue_query_audit_progress
+  - utter_ask_continue_query_receive_date
+  - utter_ask_continue_query_drugstore_mobile
+  - utter_ask_continue_trouble_invoice_loss
+  - utter_ask_continue_trouble_invoice_reimbursement
+  - utter_no_patient_name
+  - utter_no_phone-number
+  - utter_no_apply_drug
+  # - utter_consult_service_tel
+  # - utter_consult_service_worktimes
+  # - utter_consult_platform
+  # - utter_consult_application_materials
+  # - utter_consult_fill_express
+  # - utter_consult_invoice_return
+  - utter_restart_with_button
+  - utter_default
+  - utter_default_with_human
+  - utter_out_of_scope
+  - utter_invoice_loss_fkw
+  - utter_invoice_loss_rfm
+  - utter_invoice_loss_nml
+  - utter_invoice_loss_yj
+  - utter_is_reimburse_fkw_no
+  - utter_is_reimburse_fkw_yes
+  - utter_how_to_certificate_no_reimburse
+  - utter_question_not_fit
+  - utter_thumbsup
+  - utter_ok
+  - utter_is_help
+  - utter_feedback_nagetive
+  - utter_feedback_positive
+  - action_greet
+  - action_query_receipt_address
+  - action_query_drugstore
+  - action_query_apply_city
+  - action_query_audit_progress
+  - action_query_receive_date
+  - action_query_drugstore_mobile
+  - action_default_fallback
+  - action_default_ask_affirmation
+  - action_restart_tracker
 
 
 forms:
-- query_receipt_form
-- query_drugstore_form
-- query_apply_city_form
-- query_audit_progress_form
-- trouble_invoice_loss_form
-- trouble_invoice_reimbursement_form
+  - query_receipt_form
+  - query_drugstore_form
+  - query_apply_city_form
+  - query_audit_progress_form
+  - query_receive_date_form
+  - query_drugstore_mobile_form
+  - trouble_invoice_loss_form
+  - trouble_invoice_reimbursement_form
+
+
+session_config:
+  session_expiration_time: 15  # value in minutes, 0 means infinitely long
+  carry_over_slots_to_new_session: false  # set to false to forget slots between sessions

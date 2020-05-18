@@ -1,22 +1,29 @@
-## 你好
-* greet
-  - utter_greet
+## 好的
 * affirm
-  - utter_good
+  - utter_thumbsup
 
 ## 再见
 * goodbye
   - utter_goodbye
 
-* out_of_scope
-  - utter_out_of_scope
+## faq
+* faq
+  - respond_faq
+
+## chitchat
+* chitchat
+  - respond_chitchat
+
+## 无法识别
 * out_of_scope
   - utter_out_of_scope
 
+## 解决问题
 * feedback_positive
   - utter_feedback_positive
-  - action_restart_tracker
+  <!-- - action_restart_tracker -->
 
+## 未解决问题
 * feedback_nagetive
   - utter_feedback_nagetive
-  - action_restart_tracker
+  <!-- - action_restart_tracker -->
