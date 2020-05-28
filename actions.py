@@ -29,8 +29,6 @@ class ActionGreet(Action):
         return [UserUtteranceReverted()]
 
 
-
-
 class QueryReceiptForm(FormAction):
     """查询：发票邮寄地址"""
 
@@ -73,11 +71,19 @@ class QueryReceiptForm(FormAction):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict]:
-        # post_data = {'name':tracker.get_slot('patient_name'), 'mobile':tracker.get_slot('phone-number'), 'apply_drug':tracker.get_slot('apply_drug')}
-        # yyc_query = queryApi.yycQuery()
-        # res = yyc_query.query_receipt(post_data)
-        # dispatcher.utter_message(res['text'])
-        dispatcher.utter_message('name:{}, mobile:{}, apply_drug:{}'.format(tracker.get_slot('patient_name'), tracker.get_slot('phone-number'), tracker.get_slot('apply_drug')))
+
+        yyc_query = queryApi.yycQuery()
+        post_data = {'name':tracker.get_slot('patient_name'), 'mobile':tracker.get_slot('phone-number'), 'papProjectName':tracker.get_slot('apply_drug')}
+        res = yyc_query.query_emailaddr(post_data)
+        print("res:")
+        print(res)
+
+        if res.get('success') and res.get('code') == 20000 and res.get('data'):
+            dispatcher.utter_message("您的筹药信息已找到，发票邮寄地址是：" + res.get('data') )
+        else:
+            dispatcher.utter_message("您的筹药信息未找到，无需邮寄发票")
+
+        # dispatcher.utter_message('name:{}, mobile:{}, apply_drug:{}'.format(tracker.get_slot('patient_name'), tracker.get_slot('phone-number'), tracker.get_slot('apply_drug')))
         return []
 
 
@@ -115,11 +121,19 @@ class QueryDrugstoreForm(FormAction):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict]:
-        # yyc_query = queryApi.yycQuery()
-        # post_data = {'name':tracker.get_slot('patient_name'), 'mobile':tracker.get_slot('phone-number'), 'apply_drug':tracker.get_slot('apply_drug')}
-        # res = yyc_query.query_drugstore(post_data)
+
+        yyc_query = queryApi.yycQuery()
+        post_data = {'name':tracker.get_slot('patient_name'), 'mobile':tracker.get_slot('phone-number'), 'papProjectName':tracker.get_slot('apply_drug')}
+        res = yyc_query.query_receivedrugstore(post_data)
+        print("res:")
+        print(res)
+
+        if res.get('success') and res.get('code') == 20000 and res.get('data'):
+            dispatcher.utter_message("您的筹药申请已经通过，您的领药地址是：" + res.get('data') )
+        else:
+            dispatcher.utter_message("您的筹药信息未找到，请与人工联系" )
+
         # dispatcher.utter_message("您的筹药申请已经通过，您的领药地址是：{dr_name}；药房地址：邯郸市中华南大街1号；药房联系电话：{dr_mobile}。 本人直接凭身份证原件及正反两面复印件、处方原件领取药品；亲属代领请携带患者身份证原件及正反两面复印件、处方原件、领药委托书、患者手持一周内报纸拍摄的影像材料、代领人身份证原件及正反两面复印件。".format(**res))
-        dispatcher.utter_message("name:{}, mobile:{}, apply_drug:{}".format(tracker.get_slot('patient_name'), tracker.get_slot('phone-number'), tracker.get_slot('apply_drug')))
         return []
 
 
@@ -149,13 +163,20 @@ class QueryDrugstoreMobileForm(FormAction):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict]:
-        # yyc_query = queryApi.yycQuery()
-        # post_data = {'name':tracker.get_slot('patient_name'), 'mobile':tracker.get_slot('phone-number'), 'apply_drug':tracker.get_slot('apply_drug')}
-        # res = yyc_query.query_drugstore(post_data)
+        yyc_query = queryApi.yycQuery()
+        post_data = {'name':tracker.get_slot('drugstore_name')}
+        res = yyc_query.query_drugstorephone(post_data)
+
+        print("res:")
+        print(res)
+
+        if res.get('success') and res.get('code') == 20000 and res.get('data'):
+            dispatcher.utter_message("您要查询的药房的电话是：" + res.get('data') )
+        else:
+            dispatcher.utter_message("未找到您要查询的药房电话，请与人工联系" )
+
         # drugstore_name = tracker.get_slot('drugstore_name')
         # dispatcher.utter_message("您药房{}的电话是XXXXXX。".format(drugstore_name))
-        # dispatcher.utter_message("非常抱歉，未查询到该药房的电话，建议您下次领药时，可以到药房询问该药房是否有联系方式")
-        dispatcher.utter_message("drugstore_name:{}".format(tracker.get_slot('drugstore_name')))
         return []
 
 
@@ -164,7 +185,7 @@ class QueryApplyCityForm(FormAction):
 
     def name(self):
         return "query_apply_city_form"
-    
+
     @staticmethod
     def required_slots(tracker):
         return ["apply_city", "apply_drug"]
@@ -179,20 +200,32 @@ class QueryApplyCityForm(FormAction):
                 self.from_entity(entity="apply_drug"),
             ]
         }
-    
+
     def submit(
         self,
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict]:
-        dispatcher.utter_message("本地市有合作药房。")
+
+        yyc_query = queryApi.yycQuery()
+        post_data = {'city':tracker.get_slot('apply_city'), 'papProjectName':tracker.get_slot('apply_drug')}
+        res = yyc_query.query_patientprocess(post_data)
+        print("res:")
+        print(res)
+
+        if res.get('success') and res.get('code') == 20000 and res.get('data'):
+            dispatcher.utter_message("您查询的城市有如下合作药房是：" + res.get('data') )
+        else:
+            dispatcher.utter_message("您查询的城市没有合作药房，请与人工联系" )
+
+        #dispatcher.utter_message("本地市有合作药房。")
         return []
 
 
 class QueryAuditProgressForm(FormAction):
     """查询：申请进度"""
-    
+
     def name(self):
         return "query_audit_progress_form"
 
@@ -213,14 +246,26 @@ class QueryAuditProgressForm(FormAction):
                 self.from_entity(entity="apply_drug"),
             ]
         }
-    
+
     def submit(
         self,
         dispatcher: CollectingDispatcher,
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict]:
-        dispatcher.utter_message("江小白福可维第11次审核通过，您的领药药房：邯郸医药大厦连锁有限公司；药房地址：邯郸市中华南大街1号；领药日期：2019-06-18；药房联系电话：0797-8277239")
+
+        yyc_query = queryApi.yycQuery()
+        post_data = {'name':tracker.get_slot('patient_name'), 'mobile':tracker.get_slot('phone-number'), 'papProjectName':tracker.get_slot('apply_drug')}
+        res = yyc_query.query_patientprocess(post_data)
+        print("res:")
+        print(res)
+
+        if res.get('success') and res.get('code') == 20000 and res.get('data'):
+            dispatcher.utter_message("您的筹药进度已经查到，当前状态是：" + res.get('data') )
+        else:
+            dispatcher.utter_message("您的筹药进度未查到，请与人工联系" )
+
+        # dispatcher.utter_message("江小白福可维第11次审核通过，您的领药药房：邯郸医药大厦连锁有限公司；药房地址：邯郸市中华南大街1号；领药日期：2019-06-18；药房联系电话：0797-8277239")
         return []
 
 
@@ -257,7 +302,7 @@ class QueryReceiveDateForm(FormAction):
         return {'patient_idsn': value}
         # dispatcher.utter_message(“证件号格式不正确”)
         # return {"patient_idsn": None}
-    
+
     def submit(
         self,
         dispatcher: CollectingDispatcher,
@@ -268,9 +313,22 @@ class QueryReceiveDateForm(FormAction):
         patient_idsn = tracker.get_slot('patient_idsn')
         if(apply_drug=='百泽安'):
             apply_drug = apply_drug + tracker.get_slot('bza_type')
-        
-        dispatcher.utter_message(apply_drug+' '+patient_idsn+' '+"您好，您的领药日期是：XXXX-XX-XX。")
+
+        yyc_query = queryApi.yycQuery()
+        post_data = {'idsn':tracker.get_slot('patient_idsn'), 'papProjectName':tracker.get_slot('apply_drug')}
+        res = yyc_query.query_patientreceivetime(post_data)
+        print("res:")
+        print(res)
+
+        if res.get('success') and res.get('code') == 20000 and res.get('data'):
+            dispatcher.utter_message("已查到您的筹药信息，您的领药日期是：" + res.get('data') )
+        else:
+            dispatcher.utter_message("未查到您的筹药信息，如有其他需要请与人工联系" )
+
         return []
+
+        #dispatcher.utter_message(apply_drug+' '+patient_idsn+' '+"您好，您的领药日期是：XXXX-XX-XX。")
+        #return []
 
 
 class TroubleInvoiceLossForm(FormAction):
@@ -289,7 +347,7 @@ class TroubleInvoiceLossForm(FormAction):
                 self.from_entity(entity="apply_drug"),
             ]
         }
-    
+
     def validate_apply_drug(self, value:Text, dispatcher:CollectingDispatcher, tracker:Tracker ,domain:Dict[Text, Any]):
         from params import drug_dict
         if(value not in drug_dict):
@@ -297,8 +355,8 @@ class TroubleInvoiceLossForm(FormAction):
             return {"apply_drug":None}
         else:
             return {"apply_drug":value}
-        
-    
+
+
     def submit(
         self,
         dispatcher: CollectingDispatcher,
@@ -355,10 +413,8 @@ class TroubleInvoiceReimbursementForm(FormAction):
                 dispatcher.utter_message(template="utter_is_reimburse_fkw_no")
         else:
             dispatcher.utter_message(template="utter_question_not_fit")
-                
+
         return []
-
-
 
 
 class ActionDefaultAskAffirmation(Action):
@@ -489,5 +545,6 @@ class ActionRestartTracker(Action):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> List["Event"]:
-    
+
         return [Restarted()]
+
