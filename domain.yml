@@ -51,6 +51,7 @@ actions:
 - utter_restart
 - utter_restart_with_button
 - utter_thumbsup
+- utter_query_invoice
 entities:
 - apply_city
 - apply_drug
@@ -89,6 +90,18 @@ intents:
 - how_to_certificate_no_reimburse
 - out_of_scope
 - deny
+- query_invoice
+- query_materials
+- query_find_drug
+- query_receive_drug
+- invoice_lose
+- invoice_submit
+- invoice_name_error
+- invoice_amount_error
+- invoice_seal_error
+- invoice_check_error
+- invoice_send_back
+- invoice_address_query
 responses:
   utter_ask_apply_city:
   - text: 请提供您要查询的城市或地区名称，如您所在的城市不在列表中，您也可以查询方便领药的邻近地市
@@ -144,7 +157,35 @@ responses:
   utter_goodbye:
   - text: 非常感谢您的咨询，祝您生活愉快！再见！
   utter_greet:
-  - text: 您好，我是您的筹药顾问小智，很高兴为您服务。我可以为您快速查询地址、电话、进度、工作时间等信息。请问有什么可以帮助您？
+  - buttons:
+    - payload: /query_invoice
+      title: 咨询发票
+    - payload: /query_materials
+      title: 咨询材料
+    - payload: /query_find_drug
+      title: 咨询筹药
+    - payload: /query_receive_drug
+      title: 咨询领药
+    text: 您好，我是您的筹药顾问小智，很高兴为您服务。我可以为您快速查询地址、电话、进度、工作时间等信息。请问有什么可以帮助您的？  
+  utter_query_invoice:
+  - buttons:
+    - payload: /invoice_lose
+      title: 发票丢失
+    - payload: /invoice_submit
+      title: 发票报销
+    - payload: /invoice_name_error
+      title: 发票姓名错误
+    - payload: /invoice_amount_error
+      title: 发票金额异常
+    - payload: /invoice_seal_error
+      title: 发票盖章问题
+    - payload: /invoice_check_error
+      title: 发票无法查验
+    - payload: /invoice_send_back
+      title: 发票回寄
+    - payload: /invoice_address_query
+      title: 发票邮寄地址查询
+    text: 好的，我可以为您解决如下发票问题
   utter_how_to_certificate_no_reimburse:
   - text: 没有固定格式，您可以去报销单位开具安罗替尼（福可维）未报销的证明，注明清楚患者姓名，发票号，安罗替尼没有报销，并盖报销单位红章即可。
   utter_invoice_loss_bza:

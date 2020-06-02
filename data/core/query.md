@@ -1,3 +1,13 @@
+## 咨询发票类问题
+* query_invoice
+  - utter_query_invoice
+
+## 查询发票快递地址
+* invoice_address_query
+  - query_receipt_form
+  - form{"name": "query_receipt_form"}
+  - form{"name": null}
+
 ## 查询发票邮寄地址
 * query_receipt_address
   - query_receipt_form
@@ -23,8 +33,6 @@
 * deny
   - action_deactivate_form
   - form{"name": null}
-
-
 
 ## 查询药房地址
 * query_drugstore

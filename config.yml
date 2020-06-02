@@ -2,7 +2,6 @@ language: zh
 
 pipeline:
 - name: JiebaTokenizer
-# - name: CRFEntityExtractor
 - name: DucklingHTTPExtractor
   language: zh$core
   url: http://localhost:8000
@@ -32,6 +31,7 @@ pipeline:
     ],
     ["low", "title", "upper"],
   ]
+- name: RegexFeaturizer
 - name: DIETClassifier
   number_of_transformer_layers: 0
 - name: ResponseSelector
