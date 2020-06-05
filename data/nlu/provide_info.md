@@ -20,7 +20,6 @@
 - 援助[福可维](apply_drug)
 - 我想要申请[安罗替尼](apply_drug)
 - 申请[安罗替尼](apply_drug)
-
 - [瑞复美](apply_drug)
 - [来那度胺](apply_drug)
 - [瑞复美（来那度胺）](apply_drug)
@@ -29,14 +28,12 @@
 - 援助[瑞复美](apply_drug)
 - 我想要申请[来那度胺](apply_drug)
 - 申请[来那度胺](apply_drug)
-
 - [脑脉利](apply_drug)
 - 我要申请[脑脉利](apply_drug)
 - 我申请的[脑脉利](apply_drug)
 - 申请[脑脉利](apply_drug)
 - 援助[脑脉利](apply_drug)
 - 我想要申请[脑脉利](apply_drug)
-
 - [益久](apply_drug)
 - 我要申请[益久](apply_drug)
 - 我申请的[益久](apply_drug)
@@ -44,16 +41,15 @@
 - 援助[益久](apply_drug)
 - 我想要申请[益久](apply_drug)
 - [益久]赠药(apply_drug)
-
 - [百泽安](apply_drug)
 - 我要申请[百泽安](apply_drug)
 - 我申请的[百泽安](apply_drug)
 - 申请[百泽安](apply_drug)
 - 援助[百泽安](apply_drug)
 - 我想要申请[百泽安](apply_drug)
-- 申请[百泽安](apply_drug)-[康盟](bza_type)
-- 援助[百泽安](apply_drug)-[康盟](bza_type)
-- 我想要申请[百泽安](apply_drug)-[康盟](bza_type)
+- 申请[百泽安](apply_drug)-[康盟](foundation)
+- 援助[百泽安](apply_drug)-[康盟](foundation)
+- 我想要申请[百泽安](apply_drug)-[康盟](foundation)
 
 ## intent:provide_apply_city
 - 湖北省[咸宁市](apply_city)

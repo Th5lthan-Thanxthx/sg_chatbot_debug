@@ -2,7 +2,6 @@ language: zh
 
 pipeline:
 - name: JiebaTokenizer
-- name: CRFEntityExtractor
 - name: DucklingHTTPExtractor
   language: zh$core
   url: http://localhost:8000
@@ -11,38 +10,31 @@ pipeline:
   - duration
   - phone-number
 - name: EntitySynonymMapper
-- name: CountVectorsFeaturizer
-  OOV_token: oov
-  token_pattern: (?u)\b\w+\b
-# - name: LexicalSyntacticFeaturizer
-#   features: [
-#     ["low", "title", "upper"],
-#     [
-#       "BOS",
-#       "EOS",
-#       "low",
-#       "prefix5",
-#       "prefix2",
-#       "suffix5",
-#       "suffix3",
-#       "suffix2",
-#       "upper",
-#       "title",
-#       "digit",
-#     ],
-#     ["low", "title", "upper"],
-#   ]
+# - name: CountVectorsFeaturizer
+#   OOV_token: oov
+#   token_pattern: (?u)\b\w+\b
+- name: LexicalSyntacticFeaturizer
+  features: [
+    ["low", "title", "upper"],
+    [
+      "BOS",
+      "EOS",
+      "low",
+      "prefix5",
+      "prefix2",
+      "suffix5",
+      "suffix3",
+      "suffix2",
+      "upper",
+      "title",
+      "digit",
+    ],
+    ["low", "title", "upper"],
+  ]
 # - name: RegexFeaturizer
 - name: DIETClassifier
-  hidden_layers_sizes:
-    text: [256, 128]
+  epochs: 300
   number_of_transformer_layers: 0
-  weight_sparsity: 0
-  intent_classification: True
-  entity_recognition: False
-  use_masked_language_model: False
-  BILOU_flag: False
-  
 - name: ResponseSelector
   epochs: 100
 

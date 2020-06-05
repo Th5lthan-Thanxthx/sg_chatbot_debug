@@ -25,5 +25,6 @@
 
 ## 未解决问题
 * feedback_nagetive
-  - utter_feedback_nagetive
+  - utter_prepare_handoff_to_human
+  - handoff_to_human_form
   <!-- - action_restart_tracker -->

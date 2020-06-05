@@ -1,4 +1,14 @@
-## intent:trouble_invoice_loss
+## intent:invoice
+- 发票
+- 发票问题
+- 查发票相关问题
+- 我想查发票
+- 我想查发票相关问题
+
+
+
+
+## intent:invoice_loss
 - [福可维](apply_drug)发票丢了
 - [安罗替尼](apply_drug)发票丢了
 - [益久](apply_drug)发票丢了
@@ -62,7 +72,10 @@
 <!-- - 患者XXX，服用[安罗替尼](apply_drug:福可维)，前面有几张购药发票丢失，但是之前留有发票照片，您看这种情况怎么办？ -->
 <!-- - 患者现在到赠药（援助）阶段，发票丢失一张怎么处理 -->
 
-## intent:trouble_invoice_reimbursement
+
+
+
+## intent:invoice_refund
 - 我没报销
 - 我的发票没报销
 - 没有进行报销啊
@@ -113,7 +126,7 @@
 <!-- - 有个患者院内开的[安罗替尼](apply_drug:福可维)，但是他的发票和清单拿去大病救助了，安罗替尼没有报销这一块，怎么办？ -->
 <!-- - 我申请了[安罗替尼](apply_drug:福可维)的报销，因为，有两盒买药的记录在住院的明细中，但住院发票和明细已交到市医保中心报销，所以无法提供发票和住院明细的原件。 -->
 
-## intent: how_to_certificate_no_reimburse
+## intent: how_to_certificate_no_refund
 - 没报销的证明怎么开？
 - 证明怎么开？
 - 去哪里开？
@@ -122,3 +135,42 @@
 - 证明是什么格式？
 - 格式是什么？
 - 证明格式是什么？
+
+
+
+
+## intent:invoice_name_error
+- 发票姓名错了
+- 发票姓名不对
+- 我发票上的姓名是错的
+
+
+
+
+## intent:invoice_incomplete
+- 发票不全
+- 发票不全怎么办
+
+
+
+
+## intent:invoice_copies
+- 发票复印件可以吗
+- 复印的发票可以申请吗
+- 发票替代品可以吗
+
+
+
+
+## intent:invoice_send_back
+- 发票回寄
+- 发票能寄回吗
+- 发票能还回来吗
+
+
+
+
+## intent:invoice_send_back
+- 其他发票问题
+- 我想咨询其他发票问题
+- 我想咨询发票的其他问题

@@ -16,10 +16,16 @@ class yycQuery(object):
         #post_data = {"name":"郑孝甫", "mobile":"13917003811", "papProjectName":"瑞复美"}
         return self.query(post_data)
 
-    # 查询领药药房地址
+    # 查询患者领药药房
     def query_receivedrugstore(self,post_data={}):
         self.url = self.base_url+'/getPatientReceiveDrugSore?app_key=16a5918f502K1tE'
         #post_data = {"name":"郑孝甫", "mobile":"13917003811", "papProjectName":"瑞复美"}
+        return self.query(post_data)
+
+    # 查询领药药房地址
+    def query_drugstoreAddress(self,post_data={}):
+        self.url = self.base_url+'/getDrugSoreAddress?app_key=16a5918f502K1tE'
+        #post_data = {"name":"北京众协阳光大药房有限公司"}
         return self.query(post_data)
 
     # 查询药房电话
