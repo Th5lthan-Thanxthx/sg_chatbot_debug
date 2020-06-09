@@ -1,14 +1,6 @@
 ## 发票名称错误
 * invoice_name_error
-  - invoice_name_error_form
-  - form{"name": "invoice_name_error_form"}
-  - form{"name": null}
-  <!-- - utter_is_help -->
-
-* invoice_name_error
-  - invoice_name_error_form
-  - form{"name": "invoice_name_error_form"}
-* faq
-  - respond_faq
-  - invoice_name_error_form
+  - utter_prepare_handoff_to_human
+  - prepare_handoff_to_human_form
+  - form{"name": "prepare_handoff_to_human_form"}
   - form{"name": null}

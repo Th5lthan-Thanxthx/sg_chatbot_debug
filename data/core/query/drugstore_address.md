@@ -3,6 +3,7 @@
   - query_drugstore_address_form
   - form{"name": "query_drugstore_address_form"}
   - form{"name": null}
+  - utter_is_help
 
 * query_drugstore_address
   - query_drugstore_address_form
@@ -13,6 +14,7 @@
 * affirm
   - query_drugstore_address_form
   - form{"name": null}
+  - utter_is_help
   
 * query_drugstore_address
   - query_drugstore_address_form

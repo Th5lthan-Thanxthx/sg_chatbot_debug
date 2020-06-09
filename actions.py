@@ -25,7 +25,7 @@ class ActionGreet(Action):
         return 'action_greet'
 
     def run(self, dispatcher, tracker, domain):
-        logger.info(tracker.events)
+        # logger.info(tracker.events)
         dispatcher.utter_message(template="utter_greet")
         return [UserUtteranceReverted()]
 
@@ -122,12 +122,16 @@ class QueryCityDrugstoreForm(FormAction):
 
         yyc_query = queryApi.yycQuery()
         post_data = {'city':tracker.get_slot('apply_city'), 'drugName':tracker.get_slot('apply_drug')}
-        res = yyc_query.query_patientreceivetime(post_data)
+        res = yyc_query.query_citydrugstore(post_data)
         print("res:")
         print(res)
 
         if res.get('success') and res.get('code') == 20000 and res.get('data'):
-            dispatcher.utter_message("您查询的城市有如下合作药房：" + res.get('data') )
+            dr_list = res.get('data')
+            dr_names = ""
+            for dr in dr_list:
+                dr_names += "{}. {} \r\n".format(dr_list.index(dr)+1, dr)
+            dispatcher.utter_message("您查询的城市有如下合作药房：\r\n" + dr_names )
         else:
             dispatcher.utter_message("您查询的城市没有合作药房，如有其他需要请与人工联系" )
 
@@ -140,7 +144,16 @@ class ActionQueryServiceTel(Action):
         return 'action_query_service_tel'
 
     def run(self, dispatcher, tracker, domain):
-        dispatcher.utter_message(template="utter_query_service_tel")
+        yyc_query = queryApi.yycQuery()
+        res = yyc_query.query_hotlinenumber()
+        print("res:")
+        print(res)
+
+        if res.get('success') and res.get('code') == 20000 and res.get('data'):
+            dispatcher.utter_message(res.get('data') )
+            dispatcher.utter_message(template="utter_is_help" )
+        else:
+            dispatcher.utter_message("热线号码未找到，请与人工联系" )
         return [UserUtteranceReverted()]
 
 
@@ -187,9 +200,9 @@ class QueryEmailAddrForm(FormAction):
         print(res)
 
         if res.get('success') and res.get('code') == 20000 and res.get('data'):
-            dispatcher.utter_message("您的筹药信息已找到，发票邮寄地址是：" + res.get('data') )
+            dispatcher.utter_message("发票邮寄地址是：" + res.get('data') )
         else:
-            dispatcher.utter_message("您的筹药信息未找到，无需邮寄发票")
+            dispatcher.utter_message("未找到发票邮寄地址，请与人工联系")
 
         # dispatcher.utter_message('name:{}, mobile:{}, apply_drug:{}'.format(tracker.get_slot('patient_name'), tracker.get_slot('phone-number'), tracker.get_slot('apply_drug')))
         return []
@@ -203,10 +216,13 @@ class QueryDrugstoreAddressForm(FormAction):
 
     @staticmethod
     def required_slots(tracker):
-        return ["apply_city","drugstore_name",]
+        return ["apply_drug","apply_city","drugstore_name",]
 
     def slot_mappings(self):
         return {
+            "apply_drug": [
+                self.from_entity(entity="apply_drug"),
+            ],
             "apply_city": [
                 self.from_entity(entity="apply_city"),
                 self.from_text(),
@@ -231,55 +247,11 @@ class QueryDrugstoreAddressForm(FormAction):
         print(res)
 
         if res.get('success') and res.get('code') == 20000 and res.get('data'):
-            dispatcher.utter_message("药房{}地址是：{}".format(tracker.get_slot('drugstore_name'), res.get('data')) )
+            dispatcher.utter_message("{}的地址是：{}".format(tracker.get_slot('drugstore_name'), res.get('data')) )
         else:
             dispatcher.utter_message("药房信息未找到，请与人工联系" )
 
-        # dispatcher.utter_message("您的筹药申请已经通过，您的领药地址是：{dr_name}；药房地址：邯郸市中华南大街1号；药房联系电话：{dr_mobile}。 本人直接凭身份证原件及正反两面复印件、处方原件领取药品；亲属代领请携带患者身份证原件及正反两面复印件、处方原件、领药委托书、患者手持一周内报纸拍摄的影像材料、代领人身份证原件及正反两面复印件。".format(**res))
         return []
-
-
-# class QueryDrugstoreMobileForm(FormAction):
-#     """查询：领药药房电话"""
-
-#     def name(self):
-#         return "query_drugstore_mobile_form"
-
-#     @staticmethod
-#     def required_slots(tracker):
-#         return [
-#             "drugstore_name",
-#         ]
-
-#     def slot_mappings(self):
-#         return {
-#             "drugstore_name": [
-#                 # self.from_entity(entity="patient_name"),
-#                 self.from_text(),
-#             ],
-#         }
-
-#     def submit(
-#         self,
-#         dispatcher: CollectingDispatcher,
-#         tracker: Tracker,
-#         domain: Dict[Text, Any],
-#     ) -> List[Dict]:
-#         yyc_query = queryApi.yycQuery()
-#         post_data = {'name':tracker.get_slot('drugstore_name')}
-#         res = yyc_query.query_drugstorephone(post_data)
-
-#         print("res:")
-#         print(res)
-
-#         if res.get('success') and res.get('code') == 20000 and res.get('data'):
-#             dispatcher.utter_message("您要查询的药房的电话是：" + res.get('data') )
-#         else:
-#             dispatcher.utter_message("未找到您要查询的药房电话，请与人工联系" )
-
-#         # drugstore_name = tracker.get_slot('drugstore_name')
-#         # dispatcher.utter_message("您药房{}的电话是XXXXXX。".format(drugstore_name))
-#         return []
 
 
 class QueryAuditProgressForm(FormAction):
@@ -300,6 +272,7 @@ class QueryAuditProgressForm(FormAction):
             ],
             "phone-number": [
                 self.from_entity(entity="phone-number"),
+                self.from_text(),
             ],
             "apply_drug": [
                 self.from_entity(entity="apply_drug"),
@@ -323,9 +296,9 @@ class QueryAuditProgressForm(FormAction):
             dispatcher.utter_message("您的筹药进度已经查到，当前状态是：" + res.get('data') )
         else:
             dispatcher.utter_message("您的筹药进度未查到，请与人工联系" )
-
-        # dispatcher.utter_message("江小白福可维第11次审核通过，您的领药药房：邯郸医药大厦连锁有限公司；药房地址：邯郸市中华南大街1号；领药日期：2019-06-18；药房联系电话：0797-8277239")
         return []
+
+
 
 
 class InvoiceLossForm(FormAction):
@@ -353,7 +326,6 @@ class InvoiceLossForm(FormAction):
         else:
             return {"apply_drug":value}
 
-
     def submit(
         self,
         dispatcher: CollectingDispatcher,
@@ -361,13 +333,16 @@ class InvoiceLossForm(FormAction):
         domain: Dict[Text, Any],
     ) -> List[Dict]:
         evts = []
-        apply_drug = tracker.get_slot('apply_drug')
-        from params import drug_dict
-        if(apply_drug in drug_dict):
-            dispatcher.utter_message(template="utter_invoice_loss_"+drug_dict[apply_drug])
+        yyc_query = queryApi.yycQuery()
+        post_data = {'drugName':tracker.get_slot('apply_drug')}
+        res = yyc_query.query_invoicemissing(post_data)
+        print("res:")
+        print(res)
+
+        if res.get('success') and res.get('code') == 20000 and res.get('data'):
+            dispatcher.utter_message(res.get('data') )
         else:
-            dispatcher.utter_message('抱歉，无法确认您申请的药品')
-            evts + [SlotSet("apply_drug",None)]
+            dispatcher.utter_message("您的筹药进度未查到，请与人工联系" )
         return evts
 
 
@@ -380,7 +355,7 @@ class InvoiceRefundForm(FormAction):
     @staticmethod
     def required_slots(tracker):
         slot = tracker.get_slot('apply_drug')
-        if( slot == '福可维'):
+        if( slot == '福可维' or slot == '吉至'):
             return ["apply_drug", "is_refund"]
         else:
             return ["apply_drug"]
@@ -410,14 +385,6 @@ class InvoiceRefundForm(FormAction):
         tracker : Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict]:
-        # slot = tracker.get_slot('apply_drug')
-        # if( slot == '福可维'):
-        #     if(tracker.get_slot("is_refund") == True):
-        #         dispatcher.utter_message(template="utter_is_refund_fkw_yes")
-        #     else:
-        #         dispatcher.utter_message(template="utter_is_refund_fkw_no")
-        # else:
-        #     dispatcher.utter_message(template="utter_question_not_fit")
 
         yyc_query = queryApi.yycQuery()
         post_data = {'drugName':tracker.get_slot('apply_drug'), 'reimbursement':tracker.get_slot('is_refund')}
@@ -430,34 +397,6 @@ class InvoiceRefundForm(FormAction):
         else:
             dispatcher.utter_message("请与人工客服联系")
 
-        #dispatcher.utter_message("待对接接口")
-        return []
-
-
-class InvoiceNameErrorForm(FormAction):
-    """发票：发票姓名错误"""
-    
-    def name(self):
-        return "invoice_name_error_form"
-
-    @staticmethod
-    def required_slots(tracker):
-        return ['apply_drug']
-    
-    def slot_mappings(self):
-        return {
-            'apply_drug':[
-                self.from_entity(entity="apply_drug")
-            ]
-        }
-
-    def submit(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker : Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Dict]:
-        dispatcher.utter_message("待对接接口")
         return []
 
 
@@ -478,6 +417,14 @@ class InvoiceIncompleteForm(FormAction):
             ]
         }
 
+    def validate_apply_drug(self, value:Text, dispatcher:CollectingDispatcher, tracker:Tracker ,domain:Dict[Text, Any]):
+        from params import drug_dict
+        if(value not in drug_dict):
+            dispatcher.utter_message('抱歉，无法确认您申请的药品')
+            return {"apply_drug":None}
+        else:
+            return {"apply_drug":value}
+
     def submit(
         self,
         dispatcher: CollectingDispatcher,
@@ -485,16 +432,18 @@ class InvoiceIncompleteForm(FormAction):
         domain: Dict[Text, Any],
     ) -> List[Dict]:
 
-        yyc_query = queryApi.yycQuery()
-        post_data = {'drugName':tracker.get_slot('apply_drug')}
-        res = yyc_query.query_invoiceincomplete(post_data)
-        print("res:")
-        print(res)
+        apply_drug = tracker.get_slot('apply_drug');
+        if(apply_drug in ['恩立施', '脑脉利', '吉至', '益久']):
+            yyc_query = queryApi.yycQuery()
+            post_data = {'drugName':apply_drug}
+            res = yyc_query.query_invoiceincomplete(post_data)
+            print("res:")
+            print(res)
 
-        if res.get('success') and res.get('code') == 20000 and res.get('data'):
-            dispatcher.utter_message( res.get('data') )
-        else:
-            dispatcher.utter_message("请与人工客服联系")
+            if res.get('success') and res.get('code') == 20000 and res.get('data'):
+                dispatcher.utter_message( res.get('data') )
+            else:
+                dispatcher.utter_message("请与人工客服联系")
 
         return []
 
@@ -575,15 +524,17 @@ class InvoiceSendBackForm(FormAction):
         return []
 
 
-class HandoffToHumanForm(FormAction):
+
+
+class PrepareHandoffToHumanForm(FormAction):
     """转人工：转人工服务前收集用户信息"""
     
     def name(self):
-        return "handoff_to_human_form"
+        return "prepare_handoff_to_human_form"
 
     @staticmethod
     def required_slots(tracker):
-        return ['patient_name', 'patient_idsn', 'apply_drug']
+        return ['patient_name', 'phone-number', 'apply_drug']
     
     def slot_mappings(self):
         return {
@@ -591,8 +542,8 @@ class HandoffToHumanForm(FormAction):
                 self.from_entity(entity="patient_name"),
                 self.from_text(),
             ],
-            "patient_idsn": [
-                self.from_entity(entity="patient_idsn"),
+            "phone-number": [
+                self.from_entity(entity="phone-number"),
                 self.from_text(),
             ],
             "apply_drug": [
@@ -606,7 +557,7 @@ class HandoffToHumanForm(FormAction):
         tracker : Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict]:
-        dispatcher.utter_message("待对接接口")
+        dispatcher.utter_message(template="utter_handoff_to_human")
         return []
 
 

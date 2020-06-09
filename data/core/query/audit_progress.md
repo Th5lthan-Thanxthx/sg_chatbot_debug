@@ -3,6 +3,7 @@
   - query_audit_progress_form
   - form{"name": "query_audit_progress_form"}
   - form{"name": null}
+  - utter_is_help
 
 * query_audit_progress
   - query_audit_progress_form
@@ -13,6 +14,7 @@
 * affirm
   - query_audit_progress_form
   - form{"name": null}
+  - utter_is_help
 
 * query_audit_progress
   - query_audit_progress_form

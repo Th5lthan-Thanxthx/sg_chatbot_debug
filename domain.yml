@@ -1,3 +1,234 @@
+session_config:
+  session_expiration_time: 15
+  carry_over_slots_to_new_session: false
+intents:
+- feedback_nagetive
+- feedback_positive
+- handoff_to_human
+- provide_drug
+- affirm
+- faq
+- chitchat
+- greet:
+    triggers: action_greet
+- goodbye
+- provide_tel
+- provide_apply_city
+- provide_patient_name
+- how_to_certificate_no_refund
+- out_of_scope
+- deny
+- invoice
+- query
+- other
+- invoice_loss
+- invoice_refund
+- invoice_name_error
+- invoice_incomplete
+- invoice_copies
+- invoice_send_back
+- invoice_other
+- query_receive_date
+- query_city_drustore
+- query_service_tel
+- query_city_drugstore
+- query_drugstore_address
+- query_audit_progress
+- query_email_addr
+- query_other
+- query_drugstore_mobile
+- faq/ask_invoice_return
+- faq/ask_application_materials
+- faq/ask_platform
+- faq/ask_fill_express
+- faq/ask_service_worktime
+- chitchat/r_u_bot
+- chitchat/ask_name
+- chitchat/haha
+entities:
+- apply_city
+- apply_drug
+- foundation
+- patient_name
+- phone-number
+slots:
+  apply_city:
+    type: unfeaturized
+  apply_drug:
+    type: categorical
+    values:
+    - 福可维
+    - 瑞复美
+    - 脑脉利
+    - 益久
+    - 百泽安
+    - 恩立施
+    - 吉至
+  drugstore_name:
+    type: unfeaturized
+  foundation:
+    type: unfeaturized
+  is_refund:
+    type: unfeaturized
+  patient_idsn:
+    type: unfeaturized
+  patient_name:
+    type: unfeaturized
+  phone-number:
+    type: unfeaturized
+  requested_slot:
+    type: unfeaturized
+responses:
+  utter_ask_apply_city:
+  - text: 请提供您要查询的城市
+  utter_ask_apply_drug:
+  - text: 请输入您申请的药品，有福可维（安罗替尼）、瑞复美（来那度胺）、脑脉利、益久、百泽安、恩立施、吉至
+  utter_ask_foundation:
+  - buttons:
+    - payload: /{"foundation":"康盟"}
+      title: 康盟
+    - payload: /{"foundation":"初保"}
+      title: 初保
+    text: 请问您是百泽安-康盟患者，还是百泽安-初保患者？
+  utter_ask_continue_query_audit_progress:
+  - text: 您想继续查询申请进度吗？
+  utter_ask_continue_query_drugstore_address:
+  - text: 您想继续查询药房地址吗?
+  utter_ask_continue_query_email_addr:
+  - text: 您想继续查询快递地址吗?
+  utter_ask_continue_query_receive_date:
+  - text: 您想继续查询领药日期吗？
+  utter_ask_continue_query_city_drugstore:
+  - text: 您想继续查询城市药房列表吗？
+  utter_ask_continue_invoice_loss:
+  - text: 您想继续咨询发票丢失了的问题吗?
+  utter_ask_continue_invoice_refund:
+  - text: 您想继续咨询发票报销了的问题吗?
+  utter_ask_drugstore_name:
+  - text: 您好，请输入您想咨询的药房名称？
+  utter_ask_is_refund:
+  - text: 请问发票中{apply_drug}药品是否报销？
+  utter_ask_patient_idsn:
+  - text: 请您提供您的身份证号码
+  utter_ask_patient_name:
+  - text: 为了更好的为您提供服务，请提供您的姓名，直接输入姓名即可。
+  - text: 请输入您的姓名
+  utter_ask_phone-number:
+  - text: 您好{patient_name}，请提供您的手机号码
+  utter_default:
+  - text: 抱歉，无法理解您的意思。
+  utter_default_with_human:
+  - text: 您好，您可以转人工客服解决此问题。
+    buttons:
+    - payload: /handoff_to_human
+      title: 转人工客服
+  utter_feedback_nagetive:
+  - text: 抱歉，目前还无法帮助您，您可以转人工客服寻求帮助。
+    buttons:
+    - title: 转人工客服
+      payload: /handoff_to_human
+  utter_handoff_to_human:
+  - buttons:
+    - title: 转人工客服
+      payload: /handoff_to_human
+    text: 点击按钮转人工
+  utter_feedback_positive:
+  - text: 很高兴能帮到您，您可以继续咨询其他问题。
+  utter_goodbye:
+  - text: 非常感谢您的咨询，祝您生活愉快！再见！
+  utter_greet:
+  - buttons:
+    - payload: /invoice
+      title: 发票问题
+    - payload: /query
+      title: 查询信息
+    - payload: /other
+      title: 查询其他
+    text: 您好，我是您的筹药顾问小智，很高兴为您服务。我可以为您快速查询地址、电话、进度、工作时间等信息。请问有什么可以帮助您的？
+  utter_invoice:
+  - buttons:
+    - payload: /invoice_loss
+      title: 发票丢失
+    - payload: /invoice_incomplete
+      title: 发票不全
+    - payload: /invoice_copies
+      title: 发票复印件/替代品可以吗?
+    - payload: /invoice_refund
+      title: 发票报销
+    - payload: /invoice_send_back
+      title: 发票回寄
+    - payload: /invoice_name_error
+      title: 发票姓名错误
+    - payload: /invoice_other
+      title: 发票其他
+    text: 好的，我可以为您解决如下发票问题
+  utter_query:
+  - buttons:
+    - payload: /query_receive_date
+      title: 领药日期查询
+    - payload: /query_service_tel
+      title: 热线号码查询
+    - payload: /query_email_addr
+      title: 邮寄地址查询
+    - payload: /query_audit_progress
+      title: 筹药进度查询
+    - payload: /query_city_drugstore
+      title: 城市药房列表
+    - payload: /query_drugstore_address
+      title: 药房地址查询
+    - payload: /query_other
+      title: 查询其他
+    text: 好，我可以为您处理如下领药相关问题
+  utter_how_to_certificate_no_refund:
+  - text: 没有固定格式，您可以去报销单位开具安罗替尼（福可维）未报销的证明，注明清楚患者姓名，发票号，安罗替尼没有报销，并盖报销单位红章即可。
+  utter_invoice_loss_bza:
+  - text: 您申请百泽安的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
+  utter_invoice_loss_fkw:
+  - text: 非常抱歉，申请安罗替尼（福可维）的筹药需要提供全价未报销的购药发票原件的，如果发票丢失，是无法提供清单、底联等材料代替发票申请筹药的。
+  utter_invoice_loss_nml:
+  - text: 您申请脑脉利的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
+  utter_invoice_loss_rfm:
+  - text: 您申请瑞复美的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
+  utter_invoice_loss_yj:
+  - text: 您申请益久的筹药，若是购药发票原件丢失，您可以提供发票复印件或者底联复印件（需包含收费章）。
+  utter_is_help:
+  - buttons:
+    - payload: /feedback_positive
+      title: 是
+    - payload: /feedback_nagetive
+      title: 否
+    text: 是否解决您的疑问？如还有疑问请联系人工筹药顾问。
+  utter_is_refund_fkw_no:
+  - text: 1.安罗替尼（福可维）没有报销，那么您需要上传以下材料：1）购药发票的复印件加盖报销单位红章（医院发票还需提供对应的购药清单）；2）报销单位开具的安罗替尼未报销证明盖报销单位红章。
+  utter_is_refund_fkw_yes:
+  - text: 非常抱歉，安罗替尼（福可维）报销之后是无法申请筹药的。
+  utter_no_apply_drug:
+  - text: 抱歉，没有获取到您的申请药品
+  utter_no_patient_name:
+  - text: 抱歉，没有获取到您的姓名
+  utter_no_phone-number:
+  - text: 抱歉，没有获取到您的手机号
+  utter_query_service_tel:
+  - text: 您好，医药筹的热线电话是：010-58103659，周一至周五9:00——17:30，您有任何疑问都可致电咨询 ；目前顾问在线时间是周一至周五
+      9：00-18:00。
+  utter_ok:
+  - text: 好的! 👍
+  - text: '行的! '
+  utter_out_of_scope:
+  - text: 抱歉,我暂时处理不了这个问题！
+  utter_question_not_fit:
+  - text: 你申请的{apply_drug}药品援助不存在此问题，正常申请即可。
+  utter_restart:
+  - text: 我又满血复活啦
+  utter_restart_with_button:
+  - buttons:
+    - payload: /restart
+      title: 重新开始
+    text: 点击按钮重新开始对话.
+  utter_thumbsup:
+  - text: 👍
+  utter_prepare_handoff_to_human:
+  - text: 请您输入姓名手机号码和药品项目，方便转接人工客服。
 actions:
 - action_default_ask_affirmation
 - action_default_fallback
@@ -11,7 +242,6 @@ actions:
 - utter_ask_foundation
 - utter_ask_continue_query_audit_progress
 - utter_ask_continue_query_drugstore_address
-# - utter_ask_continue_query_drugstore_mobile
 - utter_ask_continue_query_receive_date
 - utter_ask_continue_query_email_addr
 - utter_ask_continue_query_city_drugstore
@@ -48,14 +278,10 @@ actions:
 - utter_thumbsup
 - utter_invoice
 - utter_query
-
-entities:
-- apply_city
-- apply_drug
-- foundation
-- patient_name
-- phone-number
-
+- utter_handoff_to_human
+- utter_query_service_tel
+- utter_prepare_handoff_to_human
+- query_drugstore_mobile_form
 forms:
 - invoice_loss_form
 - invoice_refund_form
@@ -68,224 +294,5 @@ forms:
 - query_service_tel
 - query_email_addr_form
 - query_drugstore_address_form
-# - query_drugstore_mobile_form
 - query_audit_progress_form
-- handoff_to_human_form
-
-intents:
-- feedback_nagetive
-- handoff_to_human
-- provide_drug
-- affirm
-- feedback_positive
-- faq
-- chitchat
-- greet:
-    triggers: action_greet
-- goodbye
-- provide_tel
-- provide_apply_city
-- how_to_certificate_no_refund
-- out_of_scope
-- deny
-- invoice
-- query
-- other
-- invoice_loss
-- invoice_refund
-- invoice_name_error
-- invoice_incomplete
-- invoice_copies
-- invoice_send_back
-- invoice_other
-- query_receive_date
-- query_city_drustore
-- query_service_tel
-- query_city_drugstore
-- query_drugstore_address
-# - query_drugstore_mobile
-- query_audit_progress
-- query_email_addr
-- query_other
-
-responses:
-  utter_ask_apply_city:
-  - text: 请提供您要查询的城市
-  utter_ask_apply_drug:
-  - text: 请输入您申请的药品，有福可维（安罗替尼）、瑞复美（来那度胺）、脑脉利、益久、百泽安
-  utter_ask_foundation:
-  - buttons:
-    - payload: /{"foundation":"康盟"}
-      title: 康盟
-    - payload: /{"foundation":"初保"}
-      title: 初保
-    text: 请问您是百泽安-康盟患者，还是百泽安-初保患者？
-  utter_ask_continue_query_audit_progress:
-  - text: 您想继续查询申请进度吗？
-  utter_ask_continue_query_drugstore_address:
-  - text: 您想继续查询药房地址吗?
-  # utter_ask_continue_query_drugstore_mobile:
-  # - text: 您想继续查询药房电话吗？
-  utter_ask_continue_query_email_addr:
-  - text: 您想继续查询快递地址吗?
-  utter_ask_continue_query_receive_date:
-  - text: 您想继续查询领药日期吗？
-  utter_ask_continue_query_city_drugstore:
-  - text: 您想继续查询城市药房列表吗？
-  utter_ask_continue_invoice_loss:
-  - text: 您想继续咨询发票丢失了的问题吗?
-  utter_ask_continue_invoice_refund:
-  - text: 您想继续咨询发票报销了的问题吗?
-  utter_ask_drugstore_name:
-  - text: 您好，请输入您想咨询的药房名称？
-  utter_ask_is_refund:
-  - text: 请问发票中{apply_drug}药品是否报销？
-  utter_ask_patient_idsn:
-  - text: 请您提供您的身份证号码
-  utter_ask_patient_name:
-  - text: 为了更好的为您提供服务，请提供您的姓名，直接输入姓名即可。
-  - text: 请输入您的姓名
-  utter_ask_phone-number:
-  - text: 您好{patient_name}，请提供您的手机号码
-  utter_default:
-  - text: 抱歉，无法理解您的意思。
-  utter_default_with_human:
-  - text: 您好，您可以转人工客服解决此问题。
-    buttons:
-    - payload: /handoff_to_human
-      title: 转人工客服
-  utter_feedback_nagetive:
-  - text: 抱歉，目前还无法帮助您，您可以转人工客服寻求帮助。
-    buttons:
-    - title: 转人工客服
-      payload: /handoff_to_human
-  utter_feedback_positive:
-  - text: 很高兴能帮到您，您可以继续咨询其他问题。
-  utter_goodbye:
-  - text: 非常感谢您的咨询，祝您生活愉快！再见！
-  utter_greet:
-  - buttons:
-    - payload: /invoice
-      title: 发票问题
-    - payload: /query
-      title: 查询信息
-    - payload: /other
-      title: 查询其他
-    text: 您好，我是您的筹药顾问小智，很高兴为您服务。我可以为您快速查询地址、电话、进度、工作时间等信息。请问有什么可以帮助您的？  
-  utter_invoice:
-  - buttons:
-    - payload: /invoice_loss
-      title: 发票丢失
-    - payload: /invoice_incomplete
-      title: 发票不全
-    - payload: /invoice_copies
-      title: 发票复印件/替代品可以吗?
-    - payload: /invoice_refund
-      title: 发票报销
-    - payload: /invoice_send_back
-      title: 发票回寄
-    - payload: /invoice_name_error
-      title: 发票姓名错误
-    - payload: /invoice_other
-      title: 发票其他
-    text: 好的，我可以为您解决如下发票问题
-  utter_query:
-  - buttons:
-    - payload: /query_receive_date
-      title: 领药日期查询
-    - payload: /query_service_tel
-      title: 热线号码查询
-    - payload: /query_email_addr
-      title: 邮寄地址查询
-    # - payload: /query_drugstore_mobile
-    #   title: 药房号码查询
-    - payload: /query_audit_progress
-      title: 筹药进度查询
-    - payload: /query_city_drugstore
-      title: 城市药房列表
-    - payload: /query_drugstore_address
-      title: 药房地址查询
-    - payload: /query_other
-      title: 查询其他
-    text: 好，我可以为您处理如下领药相关问题
-  utter_how_to_certificate_no_refund:
-  - text: 没有固定格式，您可以去报销单位开具安罗替尼（福可维）未报销的证明，注明清楚患者姓名，发票号，安罗替尼没有报销，并盖报销单位红章即可。
-  utter_invoice_loss_bza:
-  - text: 您申请百泽安的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
-  utter_invoice_loss_fkw:
-  - text: 非常抱歉，申请安罗替尼（福可维）的筹药需要提供全价未报销的购药发票原件的，如果发票丢失，是无法提供清单、底联等材料代替发票申请筹药的。
-  utter_invoice_loss_nml:
-  - text: 您申请脑脉利的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
-  utter_invoice_loss_rfm:
-  - text: 您申请瑞复美的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
-  utter_invoice_loss_yj:
-  - text: 您申请益久的筹药，若是购药发票原件丢失，您可以提供发票复印件或者底联复印件（需包含收费章）。
-  utter_is_help:
-  - buttons:
-    - payload: /feedback_positive
-      title: 是
-    - payload: /feedback_nagetive
-      title: 否
-    text: 是否解决您的疑问？
-  utter_is_refund_fkw_no:
-  - text: 1.安罗替尼（福可维）没有报销，那么您需要上传以下材料：1）购药发票的复印件加盖报销单位红章（医院发票还需提供对应的购药清单）；2）报销单位开具的安罗替尼未报销证明盖报销单位红章。
-  utter_is_refund_fkw_yes:
-  - text: 非常抱歉，安罗替尼（福可维）报销之后是无法申请筹药的。
-  utter_no_apply_drug:
-  - text: 抱歉，没有获取到您的申请药品
-  utter_no_patient_name:
-  - text: 抱歉，没有获取到您的姓名
-  utter_no_phone-number:
-  - text: 抱歉，没有获取到您的手机号
-  utter_query_service_tel:
-  - text: 您好，医药筹的热线电话是：010-58103659，周一至周五9:00——17:30，您有任何疑问都可致电咨询 ；目前顾问在线时间是周一至周五 9：00-18:00。
-  utter_ok:
-  - text: 好的! 👍
-  - text: '行的! '
-  utter_out_of_scope:
-  - text: 抱歉,我暂时处理不了这个问题！
-  utter_question_not_fit:
-  - text: 你申请的{apply_drug}药品援助不存在此问题，正常申请即可。
-  utter_restart:
-  - text: 我又满血复活啦
-  utter_restart_with_button:
-  - buttons:
-    - payload: /restart
-      title: 重新开始
-    text: 点击按钮重新开始对话.
-  utter_thumbsup:
-  - text: 👍
-  utter_prepare_handoff_to_human:
-  - text: 请您输入姓名手机号码和药品项目，方便转接人工客服。
-
-session_config:
-  carry_over_slots_to_new_session: false
-  session_expiration_time: 15
-
-slots:
-  apply_city:
-    type: unfeaturized
-  apply_drug:
-    type: categorical
-    values:
-    - 福可维
-    - 瑞复美
-    - 脑脉利
-    - 益久
-    - 百泽安
-    - 恩立施
-    - 吉至
-  foundation:
-    type: unfeaturized
-  drugstore_name:
-    type: unfeaturized
-  is_refund:
-    type: unfeaturized
-  patient_idsn:
-    type: unfeaturized
-  patient_name:
-    type: unfeaturized
-  phone-number:
-    type: unfeaturized
-  requested_slot:
-    type: unfeaturized
+- prepare_handoff_to_human_form

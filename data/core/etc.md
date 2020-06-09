@@ -20,11 +20,13 @@
 
 ## 解决问题
 * feedback_positive
-  - utter_feedback_positive
+  - utter_goodbye
   <!-- - action_restart_tracker -->
 
 ## 未解决问题
 * feedback_nagetive
   - utter_prepare_handoff_to_human
-  - handoff_to_human_form
+  - prepare_handoff_to_human_form
+  - form{"name": "prepare_handoff_to_human_form"}
+  - form{"name": null}
   <!-- - action_restart_tracker -->

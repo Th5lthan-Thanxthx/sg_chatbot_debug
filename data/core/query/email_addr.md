@@ -3,6 +3,7 @@
   - query_email_addr_form
   - form{"name": "query_email_addr_form"}
   - form{"name": null}
+  - utter_is_help
 
 * query_email_addr
   - query_email_addr_form
@@ -13,6 +14,7 @@
 * affirm
   - query_email_addr_form
   - form{"name": null}
+  - utter_is_help
 
 * query_email_addr
   - query_email_addr_form
