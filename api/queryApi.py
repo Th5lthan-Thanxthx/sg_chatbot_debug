@@ -13,19 +13,19 @@ class yycQuery(object):
     # 1.1 查询领药日期
     def query_patientreceivetime(self,post_data={}):
         self.url = self.base_url+'/getPatientReceiveTime?app_key=16a5918f502K1tE'
-        #post_data = {"idsn":"330204194912300016", "drugName":"瑞复美"}
+        #post_data = {"drugName":"瑞复美", "idsn":"330204194912300016"}
         return self.query(post_data)
 
     # 1.2 查询城市药房列表
     def query_citydrugstore(self,post_data={}):
         self.url = self.base_url+'/getCityDrugSore?app_key=16a5918f502K1tE'
-        #post_data = {"city":"北京", "drugName":"瑞复美"}
+        #post_data = {"drugName":"瑞复美", "city":"北京"}
         return self.query(post_data)
 
     # 1.3 查询热线号码
     def query_hotlinenumber(self,post_data={}):
         self.url = self.base_url+'/queryHotlineNumber?app_key=16a5918f502K1tE'
-        #post_data = {}
+        #post_data = {"drugName":"瑞复美"}
         return self.query(post_data)
 
     # 1.4 查询邮寄地址
@@ -34,28 +34,16 @@ class yycQuery(object):
         #post_data = {"drugName":"瑞复美"}
         return self.query(post_data)
 
-    # 1.5 查询药房电话(冗余)
-    def query_drugstorephone(self,post_data={}):
-        self.url = self.base_url+'/getDrugStorePhone?app_key=16a5918f502K1tE'
-        #post_data = {"name":"北京众协阳光大药房有限公司"}
-        return self.query(post_data)
-
-    # 1.6 查询药房地址
+    # 1.5 查询药房地址
     def query_drugstoreaddr(self,post_data={}):
         self.url = self.base_url+'/getCityDrugSoreAddr?app_key=16a5918f502K1tE'
-        #post_data = {"drugStore":"北京众协阳光大药房有限公司", "city":"北京"}
+        #post_data = {"drugName":"瑞复美", "city":"北京", "drugStore":"北京众协阳光大药房有限公司"}
         return self.query(post_data)
 
-    # 1.7 查询患者进度
+    # 1.6 查询患者进度
     def query_patientprocess(self,post_data={}):
         self.url = self.base_url+'/getPatientProcess?app_key=16a5918f502K1tE'
-        #post_data = {"name":"郑孝甫", "mobile":"13917003811", "drugName":"瑞复美"}
-        return self.query(post_data)
-
-    # 1.8 查询患者领药药房(冗余)
-    def query_patientreceivedrugstore(self,post_data={}):
-        self.url = self.base_url+'/getPatientReceiveDrugSore?app_key=16a5918f502K1tE'
-        #post_data = {"name":"郑孝甫", "mobile":"13917003811", "drugName":"瑞复美"}
+        #post_data = {"drugName":"瑞复美", "name":"郑孝甫", "mobile":"13917003811"}
         return self.query(post_data)
 
     # 2.1 发票丢失
@@ -95,4 +83,3 @@ class yycQuery(object):
         result = json.loads(str(r.content,'UTF-8'))
         logger.info(result)
         return result
-
