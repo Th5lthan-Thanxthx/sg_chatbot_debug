@@ -366,8 +366,8 @@ class InvoiceRefundForm(FormAction):
                 self.from_entity(entity="apply_drug"),
             ],
             "is_refund": [
-                self.from_intent(intent="affirm",value=True),
-                self.from_intent(intent="deny",value=False),
+                self.from_intent(intent="affirm",value=1),
+                self.from_intent(intent="deny",value=0),
             ]
         }
 
