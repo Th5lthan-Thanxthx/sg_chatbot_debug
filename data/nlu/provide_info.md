@@ -73,3 +73,5 @@
 
 ## intent:provide_patient_name
 - 我叫张三
+- 我是张三
+- 我名字是张三

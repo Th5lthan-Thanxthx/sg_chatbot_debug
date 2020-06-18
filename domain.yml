@@ -2,22 +2,21 @@ session_config:
   session_expiration_time: 15
   carry_over_slots_to_new_session: false
 intents:
-- feedback_nagetive
-- feedback_positive
-- handoff_to_human
-- provide_drug
-- affirm
-- faq
-- chitchat
 - greet:
     triggers: action_greet
 - goodbye
+- affirm
+- deny
+- feedback_nagetive
+- feedback_positive
+- handoff_to_human
+- faq
+- chitchat
 - provide_tel
+- provide_drug
 - provide_apply_city
 - provide_patient_name
-- how_to_certificate_no_refund
 - out_of_scope
-- deny
 - invoice
 - query
 - other
@@ -31,7 +30,8 @@ intents:
 - query_receive_date
 - query_city_drustore
 - query_service_tel
-- query_city_drugstore
+- query_city_drugstore:
+    use_entities: []
 - query_drugstore_address
 - query_audit_progress
 - query_email_addr
@@ -45,12 +45,16 @@ intents:
 - chitchat/r_u_bot
 - chitchat/ask_name
 - chitchat/haha
+- restart
+- refund_yes
+- refund_no
 entities:
 - apply_city
 - apply_drug
 - foundation
 - patient_name
 - phone-number
+- drugstore_name
 slots:
   apply_city:
     type: unfeaturized
@@ -73,6 +77,8 @@ slots:
   patient_idsn:
     type: unfeaturized
   patient_name:
+    type: unfeaturized
+  patient_name_mobile:
     type: unfeaturized
   phone-number:
     type: unfeaturized
@@ -115,6 +121,8 @@ responses:
   - text: 请输入您的姓名
   utter_ask_phone-number:
   - text: 您好{patient_name}，请提供您的手机号码
+  utter_ask_patient_name_mobile:
+  - text: 为了更好解答您的疑问，请您输入姓名以及电话，稍后会帮您转入人工客服
   utter_default:
   - text: 抱歉，无法理解您的意思。
   utter_default_with_human:
@@ -179,18 +187,6 @@ responses:
     - payload: /query_other
       title: 查询其他
     text: 好，我可以为您处理如下领药相关问题
-  utter_how_to_certificate_no_refund:
-  - text: 没有固定格式，您可以去报销单位开具安罗替尼（福可维）未报销的证明，注明清楚患者姓名，发票号，安罗替尼没有报销，并盖报销单位红章即可。
-  utter_invoice_loss_bza:
-  - text: 您申请百泽安的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
-  utter_invoice_loss_fkw:
-  - text: 非常抱歉，申请安罗替尼（福可维）的筹药需要提供全价未报销的购药发票原件的，如果发票丢失，是无法提供清单、底联等材料代替发票申请筹药的。
-  utter_invoice_loss_nml:
-  - text: 您申请脑脉利的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
-  utter_invoice_loss_rfm:
-  - text: 您申请瑞复美的筹药，若是购药发票原件丢失，复印发票底联盖收费章即可。
-  utter_invoice_loss_yj:
-  - text: 您申请益久的筹药，若是购药发票原件丢失，您可以提供发票复印件或者底联复印件（需包含收费章）。
   utter_is_help:
   - buttons:
     - payload: /feedback_positive
@@ -219,7 +215,14 @@ responses:
   utter_question_not_fit:
   - text: 你申请的{apply_drug}药品援助不存在此问题，正常申请即可。
   utter_restart:
-  - text: 我又满血复活啦
+  - buttons:
+    - payload: /invoice
+      title: 发票问题
+    - payload: /query
+      title: 查询信息
+    - payload: /other
+      title: 查询其他
+    text: 您好，我是您的筹药顾问小智，很高兴为您服务。我可以为您快速查询地址、电话、进度、工作时间等信息。请问有什么可以帮助您的？
   utter_restart_with_button:
   - buttons:
     - payload: /restart
@@ -227,8 +230,8 @@ responses:
     text: 点击按钮重新开始对话.
   utter_thumbsup:
   - text: 👍
-  utter_prepare_handoff_to_human:
-  - text: 请您输入姓名手机号码和药品项目，方便转接人工客服。
+  utter_drug_invalid:
+  - text: 抱歉，无法确认您申请的药品。
 actions:
 - action_default_ask_affirmation
 - action_default_fallback
@@ -258,12 +261,6 @@ actions:
 - utter_feedback_positive
 - utter_goodbye
 - utter_greet
-- utter_how_to_certificate_no_refund
-- utter_invoice_loss_bza
-- utter_invoice_loss_fkw
-- utter_invoice_loss_nml
-- utter_invoice_loss_rfm
-- utter_invoice_loss_yj
 - utter_is_help
 - utter_is_refund_fkw_no
 - utter_is_refund_fkw_yes
@@ -280,8 +277,8 @@ actions:
 - utter_query
 - utter_handoff_to_human
 - utter_query_service_tel
-- utter_prepare_handoff_to_human
-- query_drugstore_mobile_form
+- utter_drug_invalid
+- utter_ask_patient_name_mobile
 forms:
 - invoice_loss_form
 - invoice_refund_form

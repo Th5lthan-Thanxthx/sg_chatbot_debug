@@ -25,7 +25,7 @@ class ActionGreet(Action):
         return 'action_greet'
 
     def run(self, dispatcher, tracker, domain):
-        # logger.info(tracker.events)
+        logger.info(tracker.sender_id)
         dispatcher.utter_message(template="utter_greet")
         return [UserUtteranceReverted()]
 
@@ -321,7 +321,7 @@ class InvoiceLossForm(FormAction):
     def validate_apply_drug(self, value:Text, dispatcher:CollectingDispatcher, tracker:Tracker ,domain:Dict[Text, Any]):
         from params import drug_dict
         if(value not in drug_dict):
-            dispatcher.utter_message('抱歉，无法确认您申请的药品')
+            dispatcher.utter_message(template="utter_drug_invalid")
             return {"apply_drug":None}
         else:
             return {"apply_drug":value}
@@ -333,8 +333,15 @@ class InvoiceLossForm(FormAction):
         domain: Dict[Text, Any],
     ) -> List[Dict]:
         evts = []
+        # from params import drug_dict
+        apply_drug = tracker.get_slot('apply_drug')
+        if(apply_drug=='百泽安'):
+            apply_drug += '初保'
+        # if(apply_drug not in drug_dict):
+        #     dispatcher.utter_message(template="utter_drug_invalid")
+        #     return evts
         yyc_query = queryApi.yycQuery()
-        post_data = {'drugName':tracker.get_slot('apply_drug')}
+        post_data = {'drugName':apply_drug}
         res = yyc_query.query_invoicemissing(post_data)
         print("res:")
         print(res)
@@ -342,7 +349,7 @@ class InvoiceLossForm(FormAction):
         if res.get('success') and res.get('code') == 20000 and res.get('data'):
             dispatcher.utter_message(res.get('data') )
         else:
-            dispatcher.utter_message("您的筹药进度未查到，请与人工联系" )
+            dispatcher.utter_message("未查询到相关结果，请与人工联系" )
         return evts
 
 
@@ -367,7 +374,9 @@ class InvoiceRefundForm(FormAction):
             ],
             "is_refund": [
                 self.from_intent(intent="affirm",value=1),
+                self.from_intent(intent="refund_yes",value=1),
                 self.from_intent(intent="deny",value=0),
+                self.from_intent(intent="refund_no",value=0),
             ]
         }
 
@@ -386,8 +395,11 @@ class InvoiceRefundForm(FormAction):
         domain: Dict[Text, Any],
     ) -> List[Dict]:
 
+        apply_drug = tracker.get_slot('apply_drug')
+        if(apply_drug == '百泽安'):
+            apply_drug += '初保'
         yyc_query = queryApi.yycQuery()
-        post_data = {'drugName':tracker.get_slot('apply_drug'), 'reimbursement':tracker.get_slot('is_refund')}
+        post_data = {'drugName':apply_drug, 'reimbursement':tracker.get_slot('is_refund')}
         res = yyc_query.query_invoicereimbursement(post_data)
         print("res:")
         print(res)
@@ -472,8 +484,11 @@ class InvoiceCopiesForm(FormAction):
         domain: Dict[Text, Any],
     ) -> List[Dict]:
 
+        apply_drug = tracker.get_slot('apply_drug')
+        if(apply_drug == '百泽安'):
+            apply_drug += '初保'
         yyc_query = queryApi.yycQuery()
-        post_data = {'drugName':tracker.get_slot('apply_drug')}
+        post_data = {'drugName':apply_drug}
         res = yyc_query.query_invoicephotocopy(post_data)
         print("res:")
         print(res)
@@ -481,7 +496,7 @@ class InvoiceCopiesForm(FormAction):
         if res.get('success') and res.get('code') == 20000 and res.get('data'):
             dispatcher.utter_message( res.get('data') )
         else:
-            dispatcher.utter_message("请与人工客服联系")
+            dispatcher.utter_message("抱歉，未找到相关信息，请与人工客服联系")
 
         return []
 
@@ -519,7 +534,7 @@ class InvoiceSendBackForm(FormAction):
         if res.get('success') and res.get('code') == 20000 and res.get('data'):
             dispatcher.utter_message( res.get('data') )
         else:
-            dispatcher.utter_message("请与人工客服联系")
+            dispatcher.utter_message("未找到相关结果，请与人工客服联系")
 
         return []
 
@@ -534,20 +549,15 @@ class PrepareHandoffToHumanForm(FormAction):
 
     @staticmethod
     def required_slots(tracker):
-        return ['patient_name', 'phone-number', 'apply_drug']
+        return ['patient_name_mobile','apply_drug']
     
     def slot_mappings(self):
         return {
-            "patient_name": [
-                self.from_entity(entity="patient_name"),
+            "patient_name_mobile": [
                 self.from_text(),
             ],
-            "phone-number": [
-                self.from_entity(entity="phone-number"),
-                self.from_text(),
-            ],
-            "apply_drug": [
-                self.from_entity(entity="apply_drug"),
+            'apply_drug':[
+                self.from_entity(entity="apply_drug")
             ]
         }
 
@@ -575,6 +585,7 @@ class ActionDefaultAskAffirmation(Action):
         self.intent_mappings.entities = self.intent_mappings.entities.map(
             lambda entities: {e.strip() for e in entities.split(",")}
         )
+
     def run(
         self,
         dispatcher: CollectingDispatcher,
@@ -594,7 +605,7 @@ class ActionDefaultAskAffirmation(Action):
         first_intent_names = [
             intent.get("name", "")
             for intent in intent_ranking
-            if intent.get("name", "") != "out_of_scope" and intent.get("name","") != None
+            if intent.get("name", "") != "out_of_scope" and intent.get("name","") != ""
         ]
 
         if(len(first_intent_names) < 1):
@@ -612,8 +623,6 @@ class ActionDefaultAskAffirmation(Action):
 
         buttons = []
         for intent in first_intent_names:
-            logger.info(intent)
-            logger.info(entities)
             buttons.append(
                 {
                     "title": self.get_button_title(intent, entities),
@@ -655,8 +664,6 @@ class ActionDefaultFallback(Action):
         domain: Dict[Text, Any],
     ) -> List["Event"]:
         # Fallback caused by TwoStageFallbackPolicy
-        logger.info('tracker.events')
-        logger.info(tracker.events)
         evts = []
         if (
             len(tracker.events) >= 4

@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 class yycQuery(object):
     def __init__(self):
         self.base_url = 'http://192.168.0.250:8080/css/0.1/ext-api';
+        # self.base_url = 'http://121.40.110.105:8081/css/0.1/ext-api';
         self.url = '';
 
     # 1.1 查询领药日期
@@ -77,6 +78,7 @@ class yycQuery(object):
         return self.query(post_data)
 
     def query(self,post_data={}):
+        logger.info(post_data)
         # headers =  { "content-type": "application/json" }
         headers =  { "Content-type": "application/json; charset=UTF-8" }
         r = requests.post(self.url,json=post_data, headers=headers)
