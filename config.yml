@@ -34,7 +34,7 @@ pipeline:
   - time
   - duration
   - phone-number
-- name: EntitySynonymMapper
+
 # - name: RegexFeaturizer
 - name: DIETClassifier
   hidden_layers_sizes:
@@ -46,6 +46,7 @@ pipeline:
   use_masked_language_model: False
   BILOU_flag: False
   epochs: 300
+- name: EntitySynonymMapper
 - name: ResponseSelector
   epochs: 100
 

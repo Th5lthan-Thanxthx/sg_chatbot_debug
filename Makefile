@@ -1,5 +1,5 @@
 train:
-	rasa train --domain domain.yml --data data --config config.yml --out models
+	rasa train --domain domain.yml --data data --config config.yml --out models -vv
 
 train-nlu:
 	rasa train nlu -u data/nlu -c config.yml --out models/nlu

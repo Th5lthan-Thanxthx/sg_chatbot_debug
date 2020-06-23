@@ -1,17 +1,3 @@
-## intent:provide_tel
-- [18812345678](phone-number)
-- 我的手机号码是[18812345678](phone-number)
-- 我的号码是[18812345678](phone-number)
-- 手机号码是[18812345678](phone-number)
-- 电话号码是[18812345678](phone-number)
-- 号码是[18812345678](phone-number)
-- 号码[18812345678](phone-number)
-- 电话是[18812345678](phone-number)
-- 电话[18812345678](phone-number)
-- 手机号[18812345678](phone-number)
-- 手机号码 [18812345678](phone-number)
-- 17800000002
-
 ## intent:provide_drug
 - [福可维](apply_drug)
 - [安罗替尼](apply_drug)
@@ -66,12 +52,13 @@
 - 我想要申请[吉至](apply_drug)
 - [吉至]赠药(apply_drug)
 
-## intent:provide_apply_city
-- 湖北省[咸宁市](apply_city)
-- 湖北[咸宁市](apply_city)
-- [咸宁市](apply_city)
 
-## intent:provide_patient_name
-- 我叫张三
-- 我是张三
-- 我名字是张三
+## synonym:福可维
+- 福可维（安罗替尼）
+- 安罗替尼（福可维）
+- 安罗替尼
+- 罗替尼
+
+## synonym:瑞复美
+- 瑞复美（来那度胺）
+- 来那度胺
